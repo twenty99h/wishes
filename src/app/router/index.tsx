@@ -6,6 +6,9 @@ export const ROUTER = createBrowserRouter([
   {
     path: '/',
     Component: App,
+  },
+  {
+    path: '/auth',
     children: [...AUTH_ROUTES],
   },
 ]);

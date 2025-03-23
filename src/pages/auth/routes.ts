@@ -1,13 +1,13 @@
 import { RouteObject } from 'react-router';
-import { Login, Register } from './ui';
+import { LoginPage, RegisterPage } from './ui';
 
 export const ROUTES: RouteObject[] = [
   {
     path: 'register',
-    Component: Register,
+    Component: RegisterPage,
   },
   {
     path: 'login',
-    Component: Login,
+    Component: LoginPage,
   },
 ];
