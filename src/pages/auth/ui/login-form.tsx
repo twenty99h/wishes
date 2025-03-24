@@ -1,44 +1,77 @@
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
+import { LoginForm, loginFormSchema } from '../model';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const form = useForm<LoginForm>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  function handleFormSubmit(data: LoginForm) {
+    console.log(data);
+  }
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Happy to see you again!</CardDescription>
+      <Card className="py-10 rounded-3xl">
+        <CardHeader className="text-center gap-1">
+          <CardTitle className="text-xl">Вход</CardTitle>
+          <CardDescription>Рады снова видеть вас!</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid gap-6">
+        <CardContent className="px-10">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleFormSubmit)}>
               <div className="grid gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="m@example.com" required />
+                <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Почта</FormLabel>
+                        <FormControl>
+                          <Input placeholder="mail@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Пароль</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full">
+                    Войти
+                  </Button>
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                  </div>
-                  <Input id="password" type="password" required />
+                <div className="text-center text-sm">
+                  Еще нет аккаунта?{' '}
+                  <Link to="/auth/register" className="underline underline-offset-4">
+                    Зарегистрироваться
+                  </Link>
                 </div>
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
               </div>
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{' '}
-                <Link to="/auth/register" className="underline underline-offset-4">
-                  Sign up
-                </Link>
-              </div>
-            </div>
-          </form>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
