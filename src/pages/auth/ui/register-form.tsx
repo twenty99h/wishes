@@ -5,11 +5,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
-import { RegisterForm, registerFormSchema } from '../model';
+
+import { Link } from '@tanstack/react-router';
+import { RegisterForm as RegisterFormType, registerFormSchema } from '../model';
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const form = useForm<RegisterForm>({
+  const form = useForm<RegisterFormType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: '',
@@ -18,7 +19,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
     },
   });
 
-  function handleFormSubmit(data: RegisterForm) {
+  function handleFormSubmit(data: RegisterFormType) {
     console.log(data);
   }
 

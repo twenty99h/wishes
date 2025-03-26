@@ -1,7 +1,7 @@
+import { Outlet } from '@tanstack/react-router';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { PropsWithChildren } from 'react';
 
-export function AuthLayout({ children }: PropsWithChildren) {
+export function AuthLayout() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-[484px] flex-col gap-6">
@@ -11,7 +11,7 @@ export function AuthLayout({ children }: PropsWithChildren) {
           </div>
           Wishbekes
         </a>
-        {children}
+        <Outlet />
         {/* TODO: Privacy policy */}
         {/* <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
           By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.

@@ -1,14 +1,19 @@
-import { createBrowserRouter } from 'react-router';
+import { authRoute } from '@/pages/auth';
+import { mainRoute } from '@/pages/main';
+import { createRootRoute, createRouter } from '@tanstack/react-router';
 import App from '../App';
-import { ROUTES as AUTH_ROUTES } from '@/pages/auth';
+import { wishesRoute } from '@/pages/wishes';
 
-export const ROUTER = createBrowserRouter([
-  {
-    path: '/',
-    Component: App,
-  },
-  {
-    path: '/auth',
-    children: [...AUTH_ROUTES],
-  },
-]);
+export const rootRoute = createRootRoute({
+  component: App,
+});
+
+const routeTree = rootRoute.addChildren([mainRoute.addChildren([wishesRoute]), authRoute]);
+
+export const router = createRouter({ routeTree, defaultPreload: 'intent' });
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}

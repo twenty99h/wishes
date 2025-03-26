@@ -5,11 +5,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
-import { LoginForm, loginFormSchema } from '../model';
+
+import { Link } from '@tanstack/react-router';
+import { LoginForm as LoginFormType, loginFormSchema } from '../model';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const form = useForm<LoginForm>({
+  const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: '',
@@ -17,7 +18,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     },
   });
 
-  function handleFormSubmit(data: LoginForm) {
+  function handleFormSubmit(data: LoginFormType) {
     console.log(data);
   }
 

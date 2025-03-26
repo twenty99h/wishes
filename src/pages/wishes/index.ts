@@ -1,0 +1,1 @@
+export { wishesRoute } from './routes';
