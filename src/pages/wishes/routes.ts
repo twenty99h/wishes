@@ -6,4 +6,4 @@ export const wishesRoute = createRoute({
   getParentRoute: () => mainRoute,
   path: '/wishes',
   pendingComponent: Spinner,
-}).lazy(() => import('./wishes.lazy').then((d) => d.Route));
+}).lazy(() => import('./ui/wishes').then((d) => d.Route));
