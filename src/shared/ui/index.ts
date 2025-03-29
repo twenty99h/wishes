@@ -12,3 +12,4 @@ export * from './spinner';
 export * from './switch';
 export * from './tooltip';
 export * from './sidebar';
+export * from './dialog';

@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { wishlistHandlers } from './wishlist-handlers';
 
 export const handlers = [
   http.get('/api/v1/user', () => {
@@ -8,4 +9,5 @@ export const handlers = [
       lastName: 'Maverick',
     });
   }),
+  ...wishlistHandlers,
 ];

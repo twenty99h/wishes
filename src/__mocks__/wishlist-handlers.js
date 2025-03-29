@@ -1,0 +1,107 @@
+import { http, HttpResponse } from 'msw';
+
+const API_PREFIX = '/api/v1/wishlist';
+
+const wishlistDB = new Map([
+  [
+    1,
+    {
+      id: 1,
+      title: 'All',
+    },
+  ],
+  [
+    2,
+    {
+      id: 2,
+      title: 'Fulfilled',
+    },
+  ],
+  [
+    3,
+    {
+      id: 3,
+      title: 'Not Fulfilled',
+    },
+  ],
+  [
+    4,
+    {
+      id: 4,
+      title: 'Electronics',
+    },
+  ],
+]);
+
+const nextWishlistId = Array.from(wishlistDB.keys()).length + 1;
+
+export const wishlistHandlers = [
+  http.get(`${API_PREFIX}`, () => {
+    const wishlists = Array.from(wishlistDB.values());
+    return HttpResponse.json(wishlists);
+  }),
+
+  http.get(`${API_PREFIX}/:id`, ({ params }) => {
+    const id = Number(params.id);
+    const wishlist = wishlistDB.get(id);
+
+    if (!wishlist) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    return HttpResponse.json(wishlist);
+  }),
+
+  http.post(`${API_PREFIX}`, async ({ request }) => {
+    const wishlistData = await request.json();
+
+    const newWishlist = {
+      id: nextWishlistId++,
+      title: wishlistData.title,
+    };
+
+    wishlistDB.set(newWishlist.id, newWishlist);
+
+    return HttpResponse.json(newWishlist, { status: 201 });
+  }),
+
+  http.put(`${API_PREFIX}/:id`, async ({ request, params }) => {
+    const id = Number(params.id);
+    const existingWishlist = wishlistDB.get(id);
+
+    if (!existingWishlist) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    const wishTabData = await request.json();
+
+    const updatedWishTab = {
+      ...existingWishTab,
+      ...wishTabData,
+      id,
+    };
+
+    wishlistDB.set(id, updatedWishTab);
+
+    return HttpResponse.json(updatedWishTab);
+  }),
+
+  http.delete(`${API_PREFIX}/:id`, ({ params }) => {
+    const id = Number(params.id);
+
+    if (!wishlistDB.has(id)) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    if (id <= 3) {
+      return new HttpResponse(null, {
+        status: 400,
+        statusText: 'Cannot delete default wish tabs',
+      });
+    }
+
+    wishlistDB.delete(id);
+
+    return new HttpResponse(null, { status: 204 });
+  }),
+];

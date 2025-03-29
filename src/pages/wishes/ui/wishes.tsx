@@ -1,8 +1,10 @@
-import { Wish } from '@/shared/types/wish';
+import { Wish, WishTab } from '@/shared/types/wish';
 import { createLazyRoute } from '@tanstack/react-router';
 import { WishesList } from './wishes-list';
 import { Flex } from '@/shared/ui';
 import { WishesTabs } from './wishes-tabs';
+import { useQuery } from '@tanstack/react-query';
+import { API } from '@/shared/api';
 
 export const Route = createLazyRoute('/wishes')({
   component: WishesPage,
@@ -25,10 +27,31 @@ const WISHES_MOCK: Wish[] = [
 ];
 
 export function WishesPage() {
+  const {
+    data: wishlists,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ['wishlists'],
+    queryFn: async () => {
+      const res = await API.get<WishTab[]>('/wishlist');
+      return res.data;
+    },
+  });
+
+  if (isPending) {
+    return <div>Wishlists loading...</div>;
+  }
+
+  if (error) {
+    return <div>Wishlists Error: {error.message}</div>;
+  }
+
+  console.log(wishlists);
+
   return (
     <Flex className="p-8" direction="column" gap={4}>
-      <h1>WishesPage</h1>
-      <WishesTabs />
+      <WishesTabs wishlists={wishlists || []} />
       <WishesList wishes={WISHES_MOCK} />
     </Flex>
   );
