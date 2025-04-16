@@ -33,7 +33,7 @@ const wishlistDB = new Map([
   ],
 ]);
 
-const nextWishlistId = Array.from(wishlistDB.keys()).length + 1;
+let nextWishlistId = Array.from(wishlistDB.keys()).length + 1;
 
 export const wishlistHandlers = [
   http.get(`${API_PREFIX}`, async () => {
