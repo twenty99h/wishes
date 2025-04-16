@@ -1,5 +1,5 @@
-import { Outlet } from '@tanstack/react-router';
 import { GalleryVerticalEnd } from 'lucide-react';
+import { Outlet } from 'react-router';
 
 export function AuthLayout() {
   return (

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { wishlistHandlers } from './wishlist-handlers';
-
+import { wishesListHandlers } from './wishes-list-handlers';
 export const handlers = [
   http.get('/api/v1/user', () => {
     return HttpResponse.json({
@@ -10,4 +10,5 @@ export const handlers = [
     });
   }),
   ...wishlistHandlers,
+  ...wishesListHandlers,
 ];

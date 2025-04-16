@@ -1,7 +1,7 @@
 import { Button, Flex, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { WishesTabForm as WishesTabFormType, wishesTabFormSchema } from '../model/wishes-tab-form-schema';
+import { WishesTabForm as WishesTabFormType, wishesTabFormSchema } from '../model';
 
 export function WishesTabForm() {
   const form = useForm({

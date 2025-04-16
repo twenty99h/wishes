@@ -36,8 +36,9 @@ const wishlistDB = new Map([
 const nextWishlistId = Array.from(wishlistDB.keys()).length + 1;
 
 export const wishlistHandlers = [
-  http.get(`${API_PREFIX}`, () => {
+  http.get(`${API_PREFIX}`, async () => {
     const wishlists = Array.from(wishlistDB.values());
+    await new Promise((res) => setTimeout(res, 500));
     return HttpResponse.json(wishlists);
   }),
 

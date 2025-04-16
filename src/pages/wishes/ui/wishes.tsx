@@ -1,58 +1,34 @@
-import { Wish, WishTab } from '@/shared/types/wish';
-import { createLazyRoute } from '@tanstack/react-router';
-import { WishesList } from './wishes-list';
 import { Flex } from '@/shared/ui';
+import { useNavigate, useParams } from 'react-router';
+
+import { useWishes, useWishlists } from '../hooks';
+import { WishesList } from './wishes-list';
 import { WishesTabs } from './wishes-tabs';
-import { useQuery } from '@tanstack/react-query';
-import { API } from '@/shared/api';
-
-export const Route = createLazyRoute('/wishes')({
-  component: WishesPage,
-});
-
-const WISHES_MOCK: Wish[] = [
-  ...Array(30)
-    .fill(0)
-    .map((_, i) => ({
-      id: i + 3,
-      title: `Wish ${i + 3}`,
-      description: `Description ${i + 3}`,
-      price: { amount: (i + 3) * 1000, currency: 'RUB' },
-      isVisible: true,
-      isFulfilled: false,
-      reservedBy: undefined,
-      productUrl: undefined,
-      imageUrl: `https://picsum.photos/${i + 3}00`,
-    })),
-];
 
 export function WishesPage() {
+  const { tabId } = useParams();
+  const navigate = useNavigate();
+
+  const { data: wishlists = [], isPending: isWishlistsPending, error: wishlistsError } = useWishlists();
+
+  const shouldFetchWishes = !isWishlistsPending && !wishlistsError && Boolean(tabId);
   const {
-    data: wishlists,
-    isPending,
-    error,
-  } = useQuery({
-    queryKey: ['wishlists'],
-    queryFn: async () => {
-      const res = await API.get<WishTab[]>('/wishlist');
-      return res.data;
-    },
-  });
+    data: wishes = [],
+    isPending: isWishesPending,
+    error: wishesError,
+  } = useWishes(Number(tabId), shouldFetchWishes);
 
-  if (isPending) {
-    return <div>Wishlists loading...</div>;
+  if (wishlists.length > 0 && !tabId) {
+    const firstWishlist = wishlists[0];
+    if (firstWishlist) {
+      navigate(`/wishes/${firstWishlist.id}`);
+    }
   }
-
-  if (error) {
-    return <div>Wishlists Error: {error.message}</div>;
-  }
-
-  console.log(wishlists);
 
   return (
     <Flex className="p-8" direction="column" gap={4}>
-      <WishesTabs wishlists={wishlists || []} />
-      <WishesList wishes={WISHES_MOCK} />
+      <WishesTabs wishlists={wishlists} isPending={isWishlistsPending} error={wishlistsError} />
+      <WishesList wishes={wishes} isPending={isWishesPending} error={wishesError} />
     </Flex>
   );
 }

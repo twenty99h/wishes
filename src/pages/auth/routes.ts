@@ -1,21 +1,24 @@
-import { rootRoute } from '@/app/router';
-import { createRoute } from '@tanstack/react-router';
-import { AuthLayout } from './ui/auth-layout';
+import { RouteObject } from 'react-router';
 
-const route = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/auth',
-  component: AuthLayout,
-});
-
-const registerRoute = createRoute({
-  getParentRoute: () => route,
-  path: '/register',
-}).lazy(() => import('./ui/register').then((d) => d.Route));
-
-const loginRoute = createRoute({
-  getParentRoute: () => route,
-  path: '/login',
-}).lazy(() => import('./ui/login').then((d) => d.Route));
-
-export const authRoute = route.addChildren([registerRoute, loginRoute]);
+export const AUTH_ROUTES: RouteObject[] = [
+  {
+    path: '/auth',
+    lazy: {
+      Component: async () => (await import('./ui/auth-layout')).AuthLayout,
+    },
+    children: [
+      {
+        path: 'register',
+        lazy: {
+          Component: async () => (await import('./ui/register')).RegisterPage,
+        },
+      },
+      {
+        path: 'login',
+        lazy: {
+          Component: async () => (await import('./ui/login')).LoginPage,
+        },
+      },
+    ],
+  },
+];

@@ -6,8 +6,8 @@ import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Link } from '@tanstack/react-router';
 import { LoginForm as LoginFormType, loginFormSchema } from '../model';
+import { Link } from 'react-router';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const form = useForm<LoginFormType>({

@@ -1,14 +1,15 @@
-import { mainRoute } from '@/pages/main';
-import { createRoute } from '@tanstack/react-router';
+import { RouteObject } from 'react-router';
 
-const _wishesRoute = createRoute({
-  getParentRoute: () => mainRoute,
-  path: '/wishes',
-}).lazy(() => import('./ui/wishes').then((d) => d.Route));
-
-export const wishesTabRoute = createRoute({
-  getParentRoute: () => _wishesRoute,
-  path: '/$tabId',
-});
-
-export const wishesRoute = _wishesRoute.addChildren([wishesTabRoute]);
+export const WISHES_ROUTES: RouteObject[] = [
+  {
+    path: '/wishes',
+    lazy: {
+      Component: async () => (await import('./ui/wishes')).WishesPage,
+    },
+    children: [
+      {
+        path: '/wishes/:tabId',
+      },
+    ],
+  },
+];

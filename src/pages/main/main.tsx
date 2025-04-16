@@ -12,12 +12,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/shared/ui/sidebar';
-import { createLazyRoute, Link, Outlet } from '@tanstack/react-router';
 import { Gift } from 'lucide-react';
-
-export const Route = createLazyRoute('/')({
-  component: MainPage,
-});
+import { Link, Outlet } from 'react-router';
 
 export function MainPage() {
   return <Layout />;

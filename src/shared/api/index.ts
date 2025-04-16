@@ -1,5 +1,3 @@
-import axios from 'axios';
-
-export const API = axios.create({
-  baseURL: '/api/v1',
-});
+export { API } from './api';
+export * as wishlistsApi from './wishlists';
+export * as wishesApi from './wishes';

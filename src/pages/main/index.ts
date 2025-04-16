@@ -1,1 +1,1 @@
-export { mainRoute } from './routes';
+export { MainPage } from './main';

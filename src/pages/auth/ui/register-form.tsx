@@ -6,8 +6,8 @@ import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Link } from '@tanstack/react-router';
 import { RegisterForm as RegisterFormType, registerFormSchema } from '../model';
+import { Link } from 'react-router';
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const form = useForm<RegisterFormType>({
