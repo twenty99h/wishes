@@ -1,8 +1,8 @@
 import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger, Button } from '@/shared/ui';
 import { Plus } from 'lucide-react';
-import { WishesTabForm } from './wishes-tab-form';
+import { WishlistForm } from './wishlist-form';
 
-export function WishesTabDialog() {
+export function WishlistDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -14,7 +14,7 @@ export function WishesTabDialog() {
         <DialogHeader>
           <DialogTitle>Создать вишлист</DialogTitle>
         </DialogHeader>
-        <WishesTabForm />
+        <WishlistForm />
       </DialogContent>
     </Dialog>
   );

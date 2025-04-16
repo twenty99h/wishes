@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import { useWishes, useWishlists } from '../hooks';
 import { WishesList } from './wishes-list';
-import { WishesTabs } from './wishes-tabs';
+import { Wishlists } from './wishlists';
 
 export function WishesPage() {
   const { tabId } = useParams();
@@ -27,7 +27,7 @@ export function WishesPage() {
 
   return (
     <Flex className="p-8" direction="column" gap={4}>
-      <WishesTabs wishlists={wishlists} isPending={isWishlistsPending} error={wishlistsError} />
+      <Wishlists wishlists={wishlists} isPending={isWishlistsPending} error={wishlistsError} />
       <WishesList wishes={wishes} isPending={isWishesPending} error={wishesError} />
     </Flex>
   );

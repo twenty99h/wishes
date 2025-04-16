@@ -10,7 +10,7 @@ export type Wish = {
   imageUrl?: string;
 };
 
-export type WishTab = {
+export type Wishlist = {
   id: number;
   title: string;
 };

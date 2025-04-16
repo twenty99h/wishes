@@ -8,6 +8,7 @@ type WishesListProps = {
   error?: Error | null;
 };
 
+// TODO: Вынести это в фичу
 export function WishesList({ wishes, isPending, error }: WishesListProps) {
   if (isPending) {
     return <WishesListSkeleton />;

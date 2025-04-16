@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { WishesTabForm as WishesTabFormType, wishesTabFormSchema } from '../model';
 
-export function WishesTabForm() {
+export function WishlistForm() {
   const form = useForm({
     resolver: zodResolver(wishesTabFormSchema),
     defaultValues: {

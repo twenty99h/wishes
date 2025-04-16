@@ -1,20 +1,20 @@
-import { WishTab } from '@/shared/types/wish';
+import { Wishlist } from '@/shared/types/wish';
 import { Flex, Skeleton } from '@/shared/ui';
 import { useParams } from 'react-router';
-import { WishesTabDialog } from './wishes-tab-dialog';
-import { WishesTabItem } from './wishes-tab-item';
+import { WishlistDialog } from './wishlist-dialog';
+import { WishlistItem } from './wishlist-item';
 
 type WishesTabsProps = {
-  wishlists: WishTab[];
+  wishlists: Wishlist[];
   isPending?: boolean;
   error?: Error | null;
 };
 
-export function WishesTabs({ wishlists, isPending, error }: WishesTabsProps) {
+export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
   const { tabId } = useParams();
 
   if (isPending) {
-    return <WishesTabsSkeleton />;
+    return <WishlistsSkeleton />;
   }
 
   // TODO: Add toast for error and maybe retry with illustration
@@ -24,15 +24,15 @@ export function WishesTabs({ wishlists, isPending, error }: WishesTabsProps) {
 
   return (
     <Flex gap={2}>
-      {wishlists.map((tab) => (
-        <WishesTabItem key={tab.id} wishTab={tab} active={tab.id === Number(tabId)} />
+      {wishlists.map((wishlist) => (
+        <WishlistItem key={wishlist.id} wishlist={wishlist} active={wishlist.id === Number(tabId)} />
       ))}
-      <WishesTabDialog />
+      <WishlistDialog />
     </Flex>
   );
 }
 
-function WishesTabsSkeleton() {
+function WishlistsSkeleton() {
   return (
     <Flex gap={2}>
       {Array.from({ length: 6 }).map((_, index) => (
