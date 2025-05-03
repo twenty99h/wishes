@@ -13,4 +13,7 @@ export type Wish = {
 export type Wishlist = {
   id: number;
   title: string;
+  deletable?: boolean;
 };
+
+export type WishlistData = Omit<Wishlist, 'id'>;

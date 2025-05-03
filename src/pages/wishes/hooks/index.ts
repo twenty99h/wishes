@@ -1,2 +1,3 @@
 export { useWishes } from './use-wishes';
-export { useWishlists } from './use-wishlists';
+
+export { useWishlistMutations, useWishlists, useWishlist } from './use-wishlist-hooks';

@@ -1,2 +1,2 @@
-export { wishesTabFormSchema } from './wishes-tab-form-schema';
-export type { WishesTabForm } from './wishes-tab-form-schema';
+export { wishlistFormSchema, useWishlistStore, WISHLIST_FORM_DEFAULT_VALUES } from './wishlist';
+export type { WishlistForm } from './wishlist';

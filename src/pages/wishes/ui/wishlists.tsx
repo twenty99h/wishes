@@ -1,7 +1,7 @@
 import { Wishlist } from '@/shared/types/wish';
 import { Flex, Skeleton } from '@/shared/ui';
 import { useParams } from 'react-router';
-import { WishlistDialog } from './wishlist-dialog';
+import { WishlistFormDialog } from './wishlist-form-dialog';
 import { WishlistItem } from './wishlist-item';
 
 type WishesTabsProps = {
@@ -11,7 +11,7 @@ type WishesTabsProps = {
 };
 
 export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
-  const { tabId } = useParams();
+  const { wishlistId } = useParams();
 
   if (isPending) {
     return <WishlistsSkeleton />;
@@ -25,9 +25,9 @@ export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
   return (
     <Flex gap={2}>
       {wishlists.map((wishlist) => (
-        <WishlistItem key={wishlist.id} wishlist={wishlist} active={wishlist.id === Number(tabId)} />
+        <WishlistItem key={wishlist.id} wishlist={wishlist} active={wishlist.id === Number(wishlistId)} />
       ))}
-      <WishlistDialog />
+      <WishlistFormDialog />
     </Flex>
   );
 }

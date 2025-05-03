@@ -1,10 +1,11 @@
 import { wishesApi } from '@/shared/api';
+import { Wishlist } from '@/shared/types/wish';
 import { useQuery } from '@tanstack/react-query';
 
-export function useWishes(tabId: number, enabled: boolean = true) {
+export function useWishes(wishlistId: Wishlist['id'], enabled: boolean = true) {
   return useQuery({
-    queryKey: [tabId],
-    queryFn: ({ queryKey }) => wishesApi.getWishes(queryKey[0]),
-    enabled: enabled && !!tabId,
+    queryKey: ['wishes', wishlistId],
+    queryFn: () => wishesApi.getWishes(wishlistId),
+    enabled: enabled && !!wishlistId,
   });
 }

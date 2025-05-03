@@ -8,7 +8,10 @@ export const WISHES_ROUTES: RouteObject[] = [
     },
     children: [
       {
-        path: '/wishes/:tabId',
+        path: '/wishes/:wishlistId',
+        lazy: {
+          Component: async () => (await import('./ui/wishes')).WishesPage,
+        },
       },
     ],
   },

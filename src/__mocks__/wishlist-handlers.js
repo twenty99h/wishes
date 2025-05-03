@@ -8,6 +8,7 @@ const wishlistDB = new Map([
     {
       id: 1,
       title: 'All',
+      deletable: true,
     },
   ],
   [
@@ -15,6 +16,7 @@ const wishlistDB = new Map([
     {
       id: 2,
       title: 'Fulfilled',
+      deletable: true,
     },
   ],
   [
@@ -22,6 +24,7 @@ const wishlistDB = new Map([
     {
       id: 3,
       title: 'Not Fulfilled',
+      deletable: true,
     },
   ],
   [
@@ -29,6 +32,7 @@ const wishlistDB = new Map([
     {
       id: 4,
       title: 'Electronics',
+      deletable: true,
     },
   ],
 ]);
@@ -39,7 +43,7 @@ export const wishlistHandlers = [
   http.get(`${API_PREFIX}`, async () => {
     const wishlists = Array.from(wishlistDB.values());
     await new Promise((res) => setTimeout(res, 500));
-    return HttpResponse.json(wishlists);
+    return HttpResponse.json({ wishlists, wishlistId: wishlists[0]?.id || null });
   }),
 
   http.get(`${API_PREFIX}/:id`, ({ params }) => {
@@ -48,6 +52,10 @@ export const wishlistHandlers = [
 
     if (!wishlist) {
       return new HttpResponse(null, { status: 404 });
+    }
+
+    if (wishlistDB.size === 1) {
+      return HttpResponse.json({ ...wishlist, deletable: false });
     }
 
     return HttpResponse.json(wishlist);
@@ -77,7 +85,7 @@ export const wishlistHandlers = [
     const wishTabData = await request.json();
 
     const updatedWishTab = {
-      ...existingWishTab,
+      ...existingWishlist,
       ...wishTabData,
       id,
     };
@@ -94,15 +102,17 @@ export const wishlistHandlers = [
       return new HttpResponse(null, { status: 404 });
     }
 
-    if (id <= 3) {
-      return new HttpResponse(null, {
-        status: 400,
-        statusText: 'Cannot delete default wish tabs',
-      });
+    let nextId = null;
+    if (wishlistDB.has(id - 1)) {
+      nextId = id - 1;
+    } else if (wishlistDB.has(id + 1)) {
+      nextId = id + 1;
     }
+
+    console.log(nextId);
 
     wishlistDB.delete(id);
 
-    return new HttpResponse(null, { status: 204 });
+    return HttpResponse.json({ id, nextId });
   }),
 ];
