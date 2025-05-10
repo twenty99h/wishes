@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import { useWishes, useWishlist, useWishlists } from '../hooks';
 import { WishesList } from './wishes-list';
-import WishlistInfo from './wishlist-info';
+import { WishlistInfo } from './wishlist-info';
 import { Wishlists } from './wishlists';
 import { useEffect } from 'react';
 
