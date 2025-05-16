@@ -72,6 +72,7 @@ const Flex = forwardRef<HTMLDivElement, FlexProps>(
         className={cn(
           flexVariants({ direction, align, justify, wrap, gap, grow, shrink }),
           inline && 'inline-flex',
+          'w-full',
           className
         )}
         {...props}

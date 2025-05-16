@@ -6,31 +6,35 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  FileUploader,
   Input,
   Label,
+  NavButton,
   Switch,
   Textarea,
 } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useWishStore, WISH_FORM_DEFAULT_VALUES, wishFormSchema } from '../../wishes/model';
-import type { WishForm } from '../../wishes/model';
-import { useWishMutations } from '../../wishes/hooks';
+import { useWishMutations } from '../hooks';
+import type { WishForm } from '../model';
+import { WISH_FORM_DEFAULT_VALUES, wishFormSchema } from '../model';
+import { WishPageMode } from '../types';
 
-export function WishForm() {
-  const closeDialog = useWishStore((state) => state.closeDialog);
-  const isEditing = useWishStore((state) => state.isEditing);
-  const formValues = useWishStore((state) => state.formValues);
+type WishFormProps = {
+  mode: WishPageMode;
+  initialValues?: WishForm;
+};
+
+export function WishForm({ mode, initialValues }: WishFormProps) {
+  const form = useForm({
+    resolver: zodResolver(wishFormSchema),
+    defaultValues: initialValues || WISH_FORM_DEFAULT_VALUES,
+  });
 
   const { createWish, updateWish } = useWishMutations();
 
-  const form = useForm({
-    resolver: zodResolver(wishFormSchema),
-    defaultValues: formValues || WISH_FORM_DEFAULT_VALUES,
-  });
-
   function handleSubmit(data: WishForm) {
-    if (data.id) {
+    if (mode === 'edit' && data.id) {
       updateWish.mutate({ ...data, id: data.id });
     } else {
       const { id, ...wishData } = data;
@@ -40,7 +44,7 @@ export function WishForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-4">
         <FormField
           control={form.control}
           name="title"
@@ -67,38 +71,18 @@ export function WishForm() {
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="price.amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Цена"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="price.currency"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="Валюта" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input type="number" placeholder="Цена" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -119,7 +103,7 @@ export function WishForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Ссылка на изображение" {...field} />
+                <FileUploader accept="image/*" {...field} value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -140,26 +124,28 @@ export function WishForm() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="isFulfilled"
-            render={({ field }) => (
-              <FormItem className="flex items-center space-x-2">
-                <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-                <Label>Исполнен</Label>
-              </FormItem>
-            )}
-          />
+          {mode === 'edit' && (
+            <FormField
+              control={form.control}
+              name="isFulfilled"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <Label>Исполнен</Label>
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
-        <Flex justify="end" gap={2}>
-          <Button type="button" variant="outline" onClick={closeDialog}>
+        <Flex className="mt-8" gap={2}>
+          <NavButton to="/wishes" type="button" variant="secondary">
             Отмена
-          </Button>
-          <Button type="submit" disabled={createWish.isPending || updateWish.isPending}>
-            {isEditing ? 'Сохранить' : 'Создать'}
+          </NavButton>
+          <Button type="submit" loading={createWish.isPending || updateWish.isPending}>
+            {mode === 'edit' ? 'Сохранить' : 'Создать'}
           </Button>
         </Flex>
       </form>

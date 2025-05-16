@@ -1,59 +1,46 @@
-import { Button, Flex, Skeleton, Text } from '@/shared/ui';
-import { Pencil } from 'lucide-react';
-import { useWish } from '../hooks/use-wish';
-import { useWishStore } from '../model';
-import { WishFormDialog } from './wish-form-dialog';
+import { Flex, Skeleton, Text } from '@/shared/ui';
+import { WishForm } from './wish-form';
+import { useParams } from 'react-router';
+import { WishPageMode } from '../types';
+import { useWish } from '../hooks';
 
 export function WishPage() {
-  const openEditingDialog = useWishStore((state) => state.openEditingDialog);
+  const { wishId } = useParams();
 
-  const { data: wish, isPending, error } = useWish();
+  const currentMode: WishPageMode = wishId ? 'edit' : 'create';
 
-  if (isPending) {
-    return <Skeleton className="w-full rounded-3xl h-78" />;
+  const { data: wish, isLoading, error } = useWish(Number(wishId));
+
+  if (isLoading) {
+    return <WishPageSkeleton />;
   }
 
-  if (error || !wish) {
-    return <div>Не удалось загрузить желание. Попробуйте обновить страницу.</div>;
-  }
-
-  function handleOpenEditingDialog() {
-    if (!wish) {
-      return;
-    }
-    openEditingDialog(wish);
-  }
+  if (error) return <Text>Error: {error.message}</Text>;
 
   return (
-    <div className="space-y-6">
-      <Flex align="center" gap={2}>
-        <Text size="xl" weight="bold">
-          {wish.title}
-        </Text>
-        <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
-          <Pencil size="16" />
-        </Button>
+    <Flex className="w-full p-6" direction="column" gap={6}>
+      <Text size="2xl" weight="bold">
+        {currentMode === 'edit' ? wish?.title : 'Новое желание'}
+      </Text>
+      <WishForm mode={currentMode} initialValues={wish} />
+    </Flex>
+  );
+}
+
+function WishPageSkeleton() {
+  return (
+    <Flex className="p-6" direction="column" gap={6}>
+      <Skeleton className="h-6 w-1/4" />
+      <Flex direction="column" gap={4}>
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-full" />
+        <Flex gap={4}>
+          <Skeleton className="h-6 w-1/2" />
+          <Skeleton className="h-6 w-1/2" />
+        </Flex>
       </Flex>
-
-      {wish.description && <Text className="text-muted-foreground">{wish.description}</Text>}
-
-      {wish.price && (
-        <Text>
-          Цена: {wish.price.amount} {wish.price.currency}
-        </Text>
-      )}
-
-      {wish.productUrl && (
-        <Text>
-          <a href={wish.productUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            Ссылка на товар
-          </a>
-        </Text>
-      )}
-
-      {wish.imageUrl && <img src={wish.imageUrl} alt={wish.title} className="rounded-lg max-w-full h-auto" />}
-
-      <WishFormDialog />
-    </div>
+    </Flex>
   );
 }

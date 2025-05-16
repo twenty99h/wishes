@@ -1,4 +1,4 @@
-import { SidebarProvider } from '@/shared/ui';
+import { SidebarProvider, SidebarTrigger } from '@/shared/ui';
 import { Outlet } from 'react-router';
 import { AppSidebar } from './sidebar';
 
@@ -8,7 +8,7 @@ export function Layout() {
       <div className="w-full flex">
         <AppSidebar />
         <main className="w-full">
-          {/* <SidebarTrigger /> */}
+          <SidebarTrigger />
           <Outlet />
         </main>
       </div>

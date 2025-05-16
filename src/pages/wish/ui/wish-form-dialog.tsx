@@ -7,7 +7,7 @@ export function WishFormDialog() {
   const open = useWishStore((state) => state.isDialogOpen);
   const openDialog = useWishStore((state) => state.openDialog);
   const closeDialog = useWishStore((state) => state.closeDialog);
-  const isEditing = useWishStore((state) => state.isEditing);
+  const isEditing = useWishStore((state) => state.formMode);
 
   return (
     <Dialog open={open}>

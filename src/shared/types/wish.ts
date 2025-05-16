@@ -2,7 +2,7 @@ export type Wish = {
   id: number;
   title: string;
   description?: string;
-  price?: { amount: number; currency: string };
+  price?: number;
   isVisible: boolean;
   isFulfilled: boolean;
   reservedBy?: number;

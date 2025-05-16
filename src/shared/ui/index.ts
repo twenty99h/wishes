@@ -16,3 +16,4 @@ export * from './spinner';
 export * from './sidebar';
 export * from './dropdown-menu';
 export * from './nav-button';
+export * from './file-uploader';
