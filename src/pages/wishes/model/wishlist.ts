@@ -9,6 +9,11 @@ export const wishlistFormSchema = z.object({
 
 export type WishlistForm = z.infer<typeof wishlistFormSchema>;
 
+export const WISHLIST_FORM_DEFAULT_VALUES: WishlistForm = {
+  id: null,
+  title: '',
+};
+
 type WishlistState = {
   formValues: WishlistForm | null;
   isDialogOpen: boolean;
@@ -17,11 +22,6 @@ type WishlistState = {
   openEditingDialog: (formValues: Wishlist) => void;
   openDialog: () => void;
   closeDialog: () => void;
-};
-
-export const WISHLIST_FORM_DEFAULT_VALUES: WishlistForm = {
-  id: null,
-  title: '',
 };
 
 export const useWishlistStore = create<WishlistState>((set) => ({

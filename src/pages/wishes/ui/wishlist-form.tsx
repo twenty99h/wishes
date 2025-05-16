@@ -24,12 +24,12 @@ export function WishlistForm() {
   const isDeletable = useWishlistStore((state) => state.isDeletable);
   const formValues = useWishlistStore((state) => state.formValues);
 
-  const { createWishlist, updateWishlist, deleteWishlist } = useWishlistMutations();
-
   const form = useForm({
     resolver: zodResolver(wishlistFormSchema),
     defaultValues: formValues || WISHLIST_FORM_DEFAULT_VALUES,
   });
+
+  const { createWishlist, updateWishlist, deleteWishlist } = useWishlistMutations();
 
   function handleSubmit({ id, title }: WishlistForm) {
     if (id) {

@@ -14,10 +14,11 @@ export function WishesPage() {
   const { data: wishlistsData, isPending: isWishlistsPending, error: wishlistsError } = useWishlists();
 
   useEffect(() => {
-    // TODO: Пофиксить бог с запросом за удаленным вишлистом
-    if (wishlistsData?.wishlistId !== wishlistId && !wishlistId) {
-      console.log('navigate');
-      navigate(`/wishes/${wishlistId || wishlistsData?.wishlistId}`);
+    // Перенаправление на доступный вишлист, если текущий отсутствует или удален
+    if (wishlistsData && (!wishlistId || wishlistsData.wishlistId !== Number(wishlistId))) {
+      // TODO: wishlistsData.wishlistId там старый сохраняется
+      console.log('navigate to available wishlist', wishlistId, wishlistsData.wishlistId);
+      navigate(`/wishes/${wishlistsData.wishlistId}`);
     }
   }, [wishlistsData, wishlistId, navigate]);
 
