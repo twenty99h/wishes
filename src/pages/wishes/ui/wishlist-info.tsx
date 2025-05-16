@@ -1,7 +1,7 @@
-import { Button, Flex, Skeleton, Text } from '@/shared/ui';
-import { Pencil } from 'lucide-react';
-import { useWishlistStore } from '../model';
 import { Wishlist } from '@/shared/types/wish';
+import { Button, Flex, NavButton, Skeleton, Text } from '@/shared/ui';
+import { Pencil, Plus } from 'lucide-react';
+import { useWishlistStore } from '../model';
 
 type WishlistInfoProps = {
   wishlist?: Wishlist;
@@ -9,7 +9,7 @@ type WishlistInfoProps = {
   error?: Error | null;
 };
 
-export default function WishlistInfo({ wishlist, isPending, error }: WishlistInfoProps) {
+export function WishlistInfo({ wishlist, isPending, error }: WishlistInfoProps) {
   const openEditingDialog = useWishlistStore((state) => state.openEditingDialog);
 
   if (isPending) {
@@ -35,6 +35,10 @@ export default function WishlistInfo({ wishlist, isPending, error }: WishlistInf
       <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
         <Pencil size="16" />
       </Button>
+      <NavButton to={`/wishes/${wishlist.id}/create`} className="rounded-full" variant="secondary">
+        <Plus size="16" />
+        <Text size="sm">Создать</Text>
+      </NavButton>
     </Flex>
   );
 }

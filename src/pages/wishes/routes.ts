@@ -4,15 +4,13 @@ export const WISHES_ROUTES: RouteObject[] = [
   {
     path: '/wishes',
     lazy: {
-      Component: async () => (await import('./ui/wishes')).WishesPage,
+      Component: async () => (await import('./ui/wishes-page')).WishesPage,
     },
-    children: [
-      {
-        path: '/wishes/:wishlistId',
-        lazy: {
-          Component: async () => (await import('./ui/wishes')).WishesPage,
-        },
-      },
-    ],
+  },
+  {
+    path: '/wishes/:wishlistId',
+    lazy: {
+      Component: async () => (await import('./ui/wishes-page')).WishesPage,
+    },
   },
 ];
