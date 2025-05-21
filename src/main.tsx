@@ -1,6 +1,5 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
 import { AppProvider } from '@/app/providers';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 
 async function enableMocking() {
@@ -13,10 +12,4 @@ async function enableMocking() {
   return worker.start();
 }
 
-enableMocking().then(() =>
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <AppProvider />
-    </StrictMode>
-  )
-);
+enableMocking().then(() => createRoot(document.getElementById('root')!).render(<AppProvider />));

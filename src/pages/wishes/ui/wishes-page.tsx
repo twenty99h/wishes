@@ -1,45 +1,40 @@
 import { Flex } from '@/shared/ui';
 import { useParams } from 'react-router';
 
-import { useWishes, useWishlist, useWishlists } from '../hooks';
-import { WishesList } from './wishes-list';
-import { WishlistInfo } from './wishlist-info';
+import { useGate, useUnit } from 'effector-react';
+import { PageGate, wishlistsQuery } from '../model';
 import { Wishlists } from './wishlists';
 
 export function WishesPage() {
   const { wishlistId } = useParams();
+  console.log('WishesPage', wishlistId);
   // const navigate = useNavigate();
+  useGate(PageGate, { wishlistId });
 
-  const { data: wishlistsData, isPending: isWishlistsPending, error: wishlistsError } = useWishlists();
+  const { data: wishlists, pending: isWishlistsPending, error: wishlistsError } = useUnit(wishlistsQuery);
 
-  // useEffect(() => {
-  //   // Перенаправление на доступный вишлист, если текущий отсутствует или удален
-  //   if (wishlistsData && (!wishlistId || wishlistsData.wishlistId !== Number(wishlistId))) {
-  //     // TODO: wishlistsData.wishlistId там старый сохраняется
-  //     console.log('navigate to available wishlist', wishlistId, wishlistsData.wishlistId);
-  //     navigate(`/wishes/${wishlistsData.wishlistId}`);
-  //   }
-  // }, [wishlistsData, wishlistId, navigate]);
+  // const { data: wishlistsData, isPending: isWishlistsPending, error: wishlistsError } = useWishlists();
 
-  const isWishlistsSuccessFetched = !isWishlistsPending && !wishlistsError && Boolean(wishlistId);
+  // const isWishlistsSuccessFetched = !isWishlistsPending && !wishlistsError && Boolean(wishlistId);
 
-  const {
-    data: wishlist,
-    isPending: isWishlistPending,
-    error: wishlistError,
-  } = useWishlist(Number(wishlistId), isWishlistsSuccessFetched);
+  // const {
+  //   data: wishlist,
+  //   isPending: isWishlistPending,
+  //   error: wishlistError,
+  // } = useWishlist(Number(wishlistId), isWishlistsSuccessFetched);
 
-  const {
-    data: wishes = [],
-    isPending: isWishesPending,
-    error: wishesError,
-  } = useWishes(Number(wishlistId), isWishlistsSuccessFetched);
+  // const {
+  //   data: wishes = [],
+  //   isPending: isWishesPending,
+  //   error: wishesError,
+  // } = useWishes(Number(wishlistId), isWishlistsSuccessFetched);
 
   return (
     <Flex className="p-8" direction="column" gap={6}>
-      <Wishlists wishlists={wishlistsData?.wishlists || []} isPending={isWishlistsPending} error={wishlistsError} />
+      <Wishlists wishlists={wishlists?.wishlists || []} isPending={isWishlistsPending} error={wishlistsError} />
+      {/* <Wishlists wishlists={wishlistsData?.wishlists || []} isPending={isWishlistsPending} error={wishlistsError} />
       <WishlistInfo wishlist={wishlist} isPending={isWishlistPending} error={wishlistError} />
-      <WishesList wishes={wishes} isPending={isWishesPending} error={wishesError} />
+      <WishesList wishes={wishes} isPending={isWishesPending} error={wishesError} /> */}
     </Flex>
   );
 }

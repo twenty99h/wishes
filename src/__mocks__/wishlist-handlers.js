@@ -43,7 +43,7 @@ export const wishlistHandlers = [
   http.get(`${API_PREFIX}`, async () => {
     const wishlists = Array.from(wishlistDB.values());
     await new Promise((res) => setTimeout(res, 500));
-    return HttpResponse.json({ wishlists, wishlistId: wishlists[0]?.id || null });
+    return HttpResponse.json({ wishlists });
   }),
 
   http.get(`${API_PREFIX}/:id`, ({ params }) => {

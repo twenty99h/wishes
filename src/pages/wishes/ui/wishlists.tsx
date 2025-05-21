@@ -35,9 +35,10 @@ export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
 function WishlistsSkeleton() {
   return (
     <Flex gap={2}>
-      {Array.from({ length: 6 }).map((_, index) => (
-        <Skeleton key={index} className="rounded-3xl h-9 w-24" />
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Skeleton key={index} className="rounded-3xl h-9 w-20" />
       ))}
+      <Skeleton className="rounded-3xl h-9 w-10" />
     </Flex>
   );
 }

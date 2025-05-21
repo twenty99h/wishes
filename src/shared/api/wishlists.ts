@@ -2,7 +2,7 @@ import { Wishlist, WishlistData } from '@/shared/types/wish';
 import { API } from './api';
 
 export async function getWishlists() {
-  const res = await API.get<{ wishlists: Wishlist[]; wishlistId: number }>('/wishlist');
+  const res = await API.get<{ wishlists: Wishlist[] }>('/wishlist');
   return res.data;
 }
 
