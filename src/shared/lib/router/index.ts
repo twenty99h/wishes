@@ -1,0 +1,1 @@
+export { initNavigation } from './model';
