@@ -1,1 +1,1 @@
-export { initNavigation } from './model';
+export { initNavigation, navigate } from './model';

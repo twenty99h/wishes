@@ -16,7 +16,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useWishlistStore, WISHLIST_FORM_DEFAULT_VALUES, wishlistFormSchema } from '../model';
 import type { WishlistForm } from '../model';
-import { useWishlistMutations } from '../hooks';
 
 export function WishlistForm() {
   const closeDialog = useWishlistStore((state) => state.closeDialog);
@@ -29,20 +28,20 @@ export function WishlistForm() {
     defaultValues: formValues || WISHLIST_FORM_DEFAULT_VALUES,
   });
 
-  const { createWishlist, updateWishlist, deleteWishlist } = useWishlistMutations();
+  // const { createWishlist, updateWishlist, deleteWishlist } = useWishlistMutations();
 
   function handleSubmit({ id, title }: WishlistForm) {
-    if (id) {
-      updateWishlist.mutate({ id, title });
-    } else {
-      createWishlist.mutate({ title });
-    }
+    // if (id) {
+    //   updateWishlist.mutate({ id, title });
+    // } else {
+    //   createWishlist.mutate({ title });
+    // }
   }
 
   function onDelete() {
-    if (formValues?.id) {
-      deleteWishlist.mutate(formValues.id);
-    }
+    // if (formValues?.id) {
+    // deleteWishlist.mutate(formValues.id);
+    // }
   }
 
   return (

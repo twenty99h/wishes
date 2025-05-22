@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger } from '@/shared/ui';
 import { Outlet } from 'react-router';
 import { AppSidebar } from './sidebar';
 
-export function Layout() {
+export function AppLayout() {
   return (
     <SidebarProvider>
       <div className="w-full flex">

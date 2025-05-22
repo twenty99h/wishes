@@ -17,7 +17,7 @@ export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
     return <WishlistsSkeleton />;
   }
 
-  // TODO: Add toast for error and maybe retry with illustration
+  // TODO: Add illustration to show error and retry button
   if (error) {
     return <div>Wishlists Error: {error.message}</div>;
   }

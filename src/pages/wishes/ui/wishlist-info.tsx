@@ -4,19 +4,18 @@ import { Pencil, Plus } from 'lucide-react';
 import { useWishlistStore } from '../model';
 
 type WishlistInfoProps = {
-  wishlist?: Wishlist;
+  wishlist: Wishlist | null;
   isPending?: boolean;
-  error?: Error | null;
 };
 
-export function WishlistInfo({ wishlist, isPending, error }: WishlistInfoProps) {
+export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
   const openEditingDialog = useWishlistStore((state) => state.openEditingDialog);
 
   if (isPending) {
-    return <Skeleton className="w-full rounded-3xl h-78" />;
+    return <Skeleton className="w-full rounded-3xl h-10" />;
   }
 
-  if (error || !wishlist) {
+  if (!wishlist) {
     return <div>Не удалось загрузить вишлист. Попробуйте обновить страницу.</div>;
   }
 

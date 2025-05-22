@@ -9,7 +9,6 @@ export function AppProvider() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        {/* <RouterProvider router={router} /> */}
         <RouterProvider router={router} />
       </ThemeProvider>
     </QueryClientProvider>
