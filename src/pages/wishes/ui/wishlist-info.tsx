@@ -1,7 +1,8 @@
 import { Wishlist } from '@/shared/types/wish';
 import { Button, Flex, NavButton, Skeleton, Text } from '@/shared/ui';
+import { useUnit } from 'effector-react';
 import { Pencil, Plus } from 'lucide-react';
-import { useWishlistStore } from '../model';
+import { dialogOpened } from '../model';
 
 type WishlistInfoProps = {
   wishlist: Wishlist | null;
@@ -9,7 +10,7 @@ type WishlistInfoProps = {
 };
 
 export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
-  const openEditingDialog = useWishlistStore((state) => state.openEditingDialog);
+  const openDialog = useUnit(dialogOpened);
 
   if (isPending) {
     return <Skeleton className="w-full rounded-3xl h-10" />;
@@ -23,7 +24,7 @@ export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
     if (!wishlist) {
       return;
     }
-    openEditingDialog(wishlist);
+    openDialog({ mode: 'edit' });
   }
 
   return (
@@ -34,7 +35,7 @@ export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
       <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
         <Pencil size="16" />
       </Button>
-      <NavButton to={`/wishes/${wishlist.id}/create`} className="rounded-full" variant="secondary">
+      <NavButton to={`/wishes/${wishlist.id}/create`} target="_blank" className="rounded-full" variant="secondary">
         <Plus size="16" />
         <Text size="sm">Создать</Text>
       </NavButton>

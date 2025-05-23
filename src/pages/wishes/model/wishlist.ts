@@ -1,7 +1,7 @@
 import { wishlistsApi } from '@/shared/api';
 import { navigate } from '@/shared/lib/router';
 import { Wishlist } from '@/shared/types/wish';
-import { createQuery } from '@farfetched/core';
+import { concurrency, createQuery } from '@farfetched/core';
 import { createEffect, createStore, sample } from 'effector';
 import { PageGate } from './page';
 
@@ -10,6 +10,8 @@ const getWishlistsFx = createEffect(wishlistsApi.getWishlists);
 export const wishlistsQuery = createQuery({
   effect: getWishlistsFx,
 });
+
+concurrency(wishlistsQuery, { strategy: 'TAKE_LATEST' });
 
 export const $currentWishlist = createStore<Wishlist | null>(null);
 export const $currentWishlistId = $currentWishlist.map((wishlist) => wishlist?.id ?? null);

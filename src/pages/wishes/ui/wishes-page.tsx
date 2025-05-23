@@ -22,7 +22,7 @@ export function WishesPage() {
     <Flex className="p-8" direction="column" gap={6}>
       <Wishlists wishlists={wishlists?.wishlists || []} isPending={isWishlistsPending} error={wishlistsError} />
       <WishlistInfo wishlist={currentWishlist} isPending={isWishlistsPending} />
-      <WishesList wishes={wishes || []} isPending={isWishlistsPending || isWishesPending} error={wishesError} />
+      <WishesList wishes={wishes || []} isPending={isWishesPending} error={wishesError} />
     </Flex>
   );
 }

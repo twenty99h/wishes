@@ -16,12 +16,12 @@ export async function createWishlist(data: WishlistData) {
   return res.data;
 }
 
-export async function updateWishlist({ id, title }: Wishlist) {
+export async function updateWishlist({ id, title }: Omit<Wishlist, 'deletable'>) {
   const res = await API.put<Wishlist>(`/wishlist/${id}`, { title });
   return res.data;
 }
 
-export async function deleteWishlist(id: Wishlist['id']) {
+export async function deleteWishlist({ id }: Pick<Wishlist, 'id'>) {
   const res = await API.delete<{ id: number; nextId: number }>(`/wishlist/${id}`);
   return res.data;
 }
