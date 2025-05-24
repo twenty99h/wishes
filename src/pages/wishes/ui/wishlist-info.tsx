@@ -35,7 +35,7 @@ export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
       <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
         <Pencil size="16" />
       </Button>
-      <NavButton to={`/wishes/${wishlist.id}/create`} target="_blank" className="rounded-full" variant="secondary">
+      <NavButton to={`/wishes/${wishlist.id}/create`} className="rounded-full" variant="secondary">
         <Plus size="16" />
         <Text size="sm">Создать</Text>
       </NavButton>

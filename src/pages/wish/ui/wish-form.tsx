@@ -3,149 +3,176 @@ import {
   Flex,
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
-  FileUploader,
   Input,
-  Label,
-  NavButton,
-  Switch,
   Textarea,
 } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Save, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useWishMutations } from '../hooks';
+import { useNavigate, useParams } from 'react-router';
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { useUnit } from 'effector-react';
 import type { WishForm } from '../model';
-import { WISH_FORM_DEFAULT_VALUES, wishFormSchema } from '../model';
+import { $isFormPending, WISH_FORM_DEFAULT_VALUES, wishCreated, wishFormSchema, wishUpdated } from '../model';
 import { WishPageMode } from '../types';
+import { ImageUpload } from './image-upload';
 
 type WishFormProps = {
   mode: WishPageMode;
-  initialValues?: WishForm;
+  initialValues?: WishForm | null;
 };
 
 export function WishForm({ mode, initialValues }: WishFormProps) {
+  const navigate = useNavigate();
+  const { wishlistId } = useParams();
+
+  const isFormPending = useUnit($isFormPending);
+
   const form = useForm({
     resolver: zodResolver(wishFormSchema),
     defaultValues: initialValues || WISH_FORM_DEFAULT_VALUES,
   });
 
-  const { createWish, updateWish } = useWishMutations();
-
   function handleSubmit(data: WishForm) {
     if (mode === 'edit' && data.id) {
-      updateWish.mutate({ ...data, id: data.id });
+      wishUpdated({ ...data });
     } else {
-      const { id, ...wishData } = data;
-      createWish.mutate(wishData);
+      const { id, ...createData } = data;
+      wishCreated({ ...createData, wishlistId: Number(wishlistId) });
     }
+  }
+
+  function goBack() {
+    navigate(-1);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="w-full space-y-4">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Название" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea placeholder="Описание" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input type="number" placeholder="Цена" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="productUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Ссылка на товар" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="imageUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <FileUploader accept="image/*" {...field} value={field.value} onChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex items-center space-x-2">
+      <form className="max-w-3xl w-full" onSubmit={form.handleSubmit(handleSubmit)}>
+        <Flex direction="column" gap={4} className="mb-6">
           <FormField
             control={form.control}
-            name="isVisible"
+            name="file"
             render={({ field }) => (
-              <FormItem className="flex items-center space-x-2">
+              <FormItem>
+                <FormLabel>Изображение</FormLabel>
                 <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  <ImageUpload imageUrl={initialValues?.imageUrl} value={field.value} onChange={field.onChange} />
                 </FormControl>
-                <Label>Видимый</Label>
+                <FormDescription>Загрузите изображение товара (необязательно)</FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          {mode === 'edit' && (
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Название</FormLabel>
+                <FormControl>
+                  <Input placeholder="Введите название желания" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Описание</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Опишите ваше желание подробнее (необязательно)"
+                    className="min-h-[100px]"
+                    {...field}
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormDescription>Необязательно</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Flex gap={4}>
             <FormField
               control={form.control}
-              name="isFulfilled"
+              name="productUrl"
               render={({ field }) => (
-                <FormItem className="flex items-center space-x-2">
+                <FormItem>
+                  <FormLabel>Ссылка на товар</FormLabel>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Input placeholder="https://example.com/product" {...field} value={field.value || ''} />
                   </FormControl>
-                  <Label>Исполнен</Label>
+                  <FormDescription>Где можно приобрести (необязательно)</FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-          )}
-        </div>
 
-        <Flex className="mt-8" gap={2}>
-          <NavButton to="/wishes" type="button" variant="secondary">
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Цена</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      {...field}
+                      value={field.value === undefined ? '' : field.value}
+                    />
+                  </FormControl>
+                  <FormDescription>Примерная стоимость (необязательно)</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Flex>
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Статус</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Theme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="available">Доступно</SelectItem>
+                      <SelectItem value="reserved">Зарезервировано</SelectItem>
+                      <SelectItem value="purchased">Куплено</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>Изменить статус желания, что влияет на его видимость</FormDescription>
+              </FormItem>
+            )}
+          />
+        </Flex>
+        <Flex justify="between">
+          <Button variant="outline" type="button" disabled={isFormPending} onClick={goBack}>
+            <X />
             Отмена
-          </NavButton>
-          <Button type="submit" loading={createWish.isPending || updateWish.isPending}>
-            {mode === 'edit' ? 'Сохранить' : 'Создать'}
+          </Button>
+          <Button type="submit" loading={isFormPending}>
+            <Save />
+            Сохранить желание
           </Button>
         </Flex>
       </form>

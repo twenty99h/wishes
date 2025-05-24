@@ -13,7 +13,7 @@ export function WishCard({ wish }: WishCardProps) {
     <Link to={`/wishes/${wishlistId}/${wish.id}`}>
       <Card className="py-4 rounded-3xl gap-3">
         <CardContent className="px-4">
-          <img className="w-full rounded-3xl" src={wish.imageUrl} alt={wish.title} />
+          <img className="w-full rounded-3xl h-64 object-cover" src={wish.imageUrl} alt={wish.title} />
         </CardContent>
         <CardFooter>
           <Flex direction="column">

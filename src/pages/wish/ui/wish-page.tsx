@@ -1,27 +1,64 @@
-import { Flex, Skeleton, Text } from '@/shared/ui';
-import { WishForm } from './wish-form';
-import { useParams } from 'react-router';
+import { Button, Flex, Skeleton, Text } from '@/shared/ui';
+import { useGate, useUnit } from 'effector-react';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router';
+import { $isWishPending, $wish, $wishError, PageGate } from '../model';
 import { WishPageMode } from '../types';
-import { useWish } from '../hooks';
+import { WishForm } from './wish-form';
+
+const TEXT_VARIANTS: Record<
+  WishPageMode,
+  {
+    title: string;
+    description: string;
+  }
+> = {
+  create: {
+    title: 'Новое желание',
+    description: 'Добавьте новое желание в ваш список!',
+  },
+  edit: {
+    title: 'Ваше желание',
+    description: 'Отредактируйте ваше желание!',
+  },
+};
 
 export function WishPage() {
   const { wishId } = useParams();
+  const navigate = useNavigate();
 
-  const currentMode: WishPageMode = wishId ? 'edit' : 'create';
+  useGate(PageGate, { wishId });
 
-  const { data: wish, isLoading, error } = useWish(Number(wishId));
+  const [wish, pending, error] = useUnit([$wish, $isWishPending, $wishError]);
 
-  if (isLoading) {
+  console.log(wish);
+
+  if (pending) {
     return <WishPageSkeleton />;
   }
 
   if (error) return <Text>Error: {error.message}</Text>;
 
+  const currentMode: WishPageMode = wishId ? 'edit' : 'create';
+
+  function goBack() {
+    navigate(-1);
+  }
+
   return (
     <Flex className="w-full p-6" direction="column" gap={6}>
-      <Text size="2xl" weight="bold">
-        {currentMode === 'edit' ? wish?.title : 'Новое желание'}
-      </Text>
+      <Button variant="outline" type="button" onClick={goBack}>
+        <ArrowLeft />
+        Назад
+      </Button>
+      <Flex direction="column">
+        <Text size="2xl" weight="bold">
+          {TEXT_VARIANTS[currentMode].title} {currentMode === 'edit' && wish && `- ${wish.title}`}
+        </Text>
+        <Text size="sm" variant="muted">
+          {TEXT_VARIANTS[currentMode].description}
+        </Text>
+      </Flex>
       <WishForm mode={currentMode} initialValues={wish} />
     </Flex>
   );

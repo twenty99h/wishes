@@ -94,13 +94,10 @@ export function WishlistForm() {
             <Button type="submit" loading={isFormActionsPending}>
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
-            {isEditing && (
-              <DeleteButton
-                withTooltip={!isCanDelete}
-                disabled={!isCanDelete}
-                loading={isFormActionsPending}
-                onClick={onDelete}
-              />
+            {isEditing && isCanDelete && (
+              <Button type="button" variant="destructive" loading={isFormActionsPending} onClick={onDelete}>
+                Удалить
+              </Button>
             )}
           </Flex>
           <Button type="button" variant="secondary" onClick={closeDialog}>
@@ -109,37 +106,5 @@ export function WishlistForm() {
         </Flex>
       </form>
     </Form>
-  );
-}
-
-type DeleteButtonProps = {
-  withTooltip?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  onClick: () => void;
-};
-// TODO: Думаю стоить убрать это гавно и просто отправлять с бека ошибку, что нельзя удалить последний вишлист и так же ставить вопросик сообщающий об этом
-function DeleteButton({ withTooltip, disabled, onClick, loading }: DeleteButtonProps) {
-  if (withTooltip) {
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Button type="button" variant="destructive" disabled={disabled} loading={loading} onClick={onClick}>
-              Удалить
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Невозможно удалить единственный вишлист</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
-
-  return (
-    <Button type="button" variant="destructive" disabled={disabled} loading={loading} onClick={onClick}>
-      Удалить
-    </Button>
   );
 }

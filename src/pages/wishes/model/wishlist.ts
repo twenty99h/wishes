@@ -1,11 +1,11 @@
-import { wishlistsApi } from '@/shared/api';
+import { supabaseWishlistsApi } from '@/shared/api/supabase';
 import { navigate } from '@/shared/lib/router';
 import { Wishlist } from '@/shared/types/wish';
 import { concurrency, createQuery } from '@farfetched/core';
 import { createEffect, createStore, sample } from 'effector';
 import { PageGate } from './page';
 
-const getWishlistsFx = createEffect(wishlistsApi.getWishlists);
+const getWishlistsFx = createEffect(supabaseWishlistsApi.getWishlists);
 
 export const wishlistsQuery = createQuery({
   effect: getWishlistsFx,
@@ -41,8 +41,8 @@ sample({
 sample({
   clock: PageGate.state,
   source: { finished: wishlistsQuery.$finished, data: wishlistsQuery.$data },
-  filter: (params) => params.finished && Boolean(params.data),
-  fn: (params, { wishlistId }) => findCurrentWishlist(params.data?.wishlists || [], wishlistId),
+  filter: ({ finished, data }) => finished && Boolean(data),
+  fn: ({ data }, { wishlistId }) => findCurrentWishlist(data?.wishlists || [], wishlistId),
   target: $currentWishlist,
 });
 

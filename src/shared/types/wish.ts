@@ -3,11 +3,11 @@ export type Wish = {
   title: string;
   description?: string;
   price?: number;
-  isVisible: boolean;
-  isFulfilled: boolean;
+  status: 'available' | 'reserved' | 'purchased';
   reservedBy?: number;
   productUrl?: string;
   imageUrl?: string;
+  wishlistId: Wishlist['id'];
 };
 
 export type Wishlist = {

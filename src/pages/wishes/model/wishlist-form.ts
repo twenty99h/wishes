@@ -1,4 +1,6 @@
 import { wishlistsApi } from '@/shared/api';
+import { supabaseWishlistsApi } from '@/shared/api/supabase';
+import { showToast, ToastParams } from '@/shared/lib/model';
 import { Wishlist } from '@/shared/types/wish';
 import { createMutation } from '@farfetched/core';
 import { createEffect, createEvent, createStore, sample } from 'effector';
@@ -20,8 +22,8 @@ export const WISHLIST_FORM_DEFAULT_VALUES: WishlistForm = {
   title: '',
 };
 
-const createWishlistFx = createEffect(wishlistsApi.createWishlist);
-const updateWishlistFx = createEffect(wishlistsApi.updateWishlist);
+const createWishlistFx = createEffect(supabaseWishlistsApi.createWishlist);
+const updateWishlistFx = createEffect(supabaseWishlistsApi.updateWishlist);
 const deleteWishlistFx = createEffect(wishlistsApi.deleteWishlist);
 
 export const createWishlistMutation = createMutation({
@@ -56,13 +58,17 @@ export const wishlistCreated = createEvent<{ title: Wishlist['title'] }>();
 export const wishlistUpdated = createEvent<{ id: Wishlist['id']; title: Wishlist['title'] }>();
 export const wishlistDeleted = createEvent<{ id: Wishlist['id'] }>();
 
-export const $isDialogOpen = createStore<boolean>(false)
-  .on(dialogOpened, () => true)
-  .reset(dialogClosed);
+export const $isDialogOpen = createStore<boolean>(false).reset(dialogClosed);
 
 export const $formMode = createStore<FormMode>('create').reset(dialogClosed);
 export const $formValues = createStore<WishlistForm | null>(null).reset(dialogClosed);
 export const $isCanDelete = createStore<boolean>(false).reset(dialogClosed);
+
+sample({
+  clock: dialogOpened,
+  fn: () => true,
+  target: $isDialogOpen,
+});
 
 sample({
   clock: dialogOpened,
@@ -113,12 +119,16 @@ sample({
 });
 
 sample({
-  clock: updateWishlistMutation.finished.success,
-  source: $currentWishlist,
-  filter: (wishlist): wishlist is Wishlist => Boolean(wishlist),
-  fn: (currentWishlist, updatedWishlistData) => ({
-    ...currentWishlist,
-    ...updatedWishlistData.result,
+  clock: [
+    createWishlistMutation.finished.failure,
+    updateWishlistMutation.finished.failure,
+    deleteWishlistMutation.finished.failure,
+  ],
+  fn: ({ error }): ToastParams => ({
+    message: error.message,
+    options: {
+      type: 'error',
+    },
   }),
-  target: $currentWishlist,
+  target: showToast,
 });
