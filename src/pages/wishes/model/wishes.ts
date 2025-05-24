@@ -1,9 +1,9 @@
-import { supabaseWishesApi } from '@/shared/api/supabase';
+import { wishesApi } from '@/shared/api';
 import { createQuery } from '@farfetched/core';
 import { createEffect, sample } from 'effector';
 import { PageGate } from './page';
 
-const getWishesFx = createEffect(supabaseWishesApi.getWishes);
+const getWishesFx = createEffect(wishesApi.getWishes);
 
 export const wishesQuery = createQuery({
   effect: getWishesFx,

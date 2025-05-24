@@ -1,5 +1,4 @@
 import { wishlistsApi } from '@/shared/api';
-import { supabaseWishlistsApi } from '@/shared/api/supabase';
 import { showToast, ToastParams } from '@/shared/lib/model';
 import { Wishlist } from '@/shared/types/wish';
 import { createMutation } from '@farfetched/core';
@@ -22,8 +21,8 @@ export const WISHLIST_FORM_DEFAULT_VALUES: WishlistForm = {
   title: '',
 };
 
-const createWishlistFx = createEffect(supabaseWishlistsApi.createWishlist);
-const updateWishlistFx = createEffect(supabaseWishlistsApi.updateWishlist);
+const createWishlistFx = createEffect(wishlistsApi.createWishlist);
+const updateWishlistFx = createEffect(wishlistsApi.updateWishlist);
 const deleteWishlistFx = createEffect(wishlistsApi.deleteWishlist);
 
 export const createWishlistMutation = createMutation({
@@ -106,6 +105,7 @@ sample({
 
 sample({
   clock: wishlistDeleted,
+  fn: ({ id }) => id,
   target: deleteWishlistMutation.start,
 });
 

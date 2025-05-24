@@ -1,11 +1,11 @@
-import { supabaseWishlistsApi } from '@/shared/api/supabase';
+import { wishlistsApi } from '@/shared/api';
 import { navigate } from '@/shared/lib/router';
 import { Wishlist } from '@/shared/types/wish';
 import { concurrency, createQuery } from '@farfetched/core';
 import { createEffect, createStore, sample } from 'effector';
 import { PageGate } from './page';
 
-const getWishlistsFx = createEffect(supabaseWishlistsApi.getWishlists);
+const getWishlistsFx = createEffect(wishlistsApi.getWishlists);
 
 export const wishlistsQuery = createQuery({
   effect: getWishlistsFx,

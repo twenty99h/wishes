@@ -1,4 +1,4 @@
-import { supabaseWishesApi } from '@/shared/api/supabase';
+import { wishesApi } from '@/shared/api';
 import { Wish, Wishlist } from '@/shared/types/wish';
 import { createMutation, createQuery } from '@farfetched/core';
 import { createEffect, createEvent, createStore, sample } from 'effector';
@@ -33,9 +33,9 @@ export const WISH_FORM_DEFAULT_VALUES: WishForm = {
   status: 'available',
 };
 
-const getWishFx = createEffect(supabaseWishesApi.getWish);
-const createWishFx = createEffect(supabaseWishesApi.createWish);
-const updateWishFx = createEffect(supabaseWishesApi.updateWish);
+const getWishFx = createEffect(wishesApi.getWish);
+const createWishFx = createEffect(wishesApi.createWish);
+const updateWishFx = createEffect(wishesApi.updateWish);
 
 export const getWishQuery = createQuery({
   effect: getWishFx,
