@@ -31,8 +31,6 @@ export function WishPage() {
 
   const [wish, pending, error] = useUnit([$wish, $isWishPending, $wishError]);
 
-  console.log(wish);
-
   if (pending) {
     return <WishPageSkeleton />;
   }

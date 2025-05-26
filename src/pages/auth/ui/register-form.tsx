@@ -6,10 +6,13 @@ import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { RegisterForm as RegisterFormType, registerFormSchema } from '../model';
+import { RegisterForm as RegisterFormType, registerFormSchema, $isRegisterFormPending, register } from '../model';
 import { Link } from 'react-router';
+import { useUnit } from 'effector-react';
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const [onRegister, isRegisterFormPending] = useUnit([register, $isRegisterFormPending]);
+
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -20,7 +23,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
   });
 
   function handleFormSubmit(data: RegisterFormType) {
-    console.log(data);
+    onRegister(data);
   }
 
   return (
@@ -35,6 +38,19 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
             <form onSubmit={form.handleSubmit(handleFormSubmit)}>
               <div className="grid gap-6">
                 <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Никнейм</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Эмнх Бенз Мензд" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="email"
@@ -55,7 +71,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                       <FormItem>
                         <FormLabel>Пароль</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" placeholder="Супер сложный пароль" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -68,13 +84,13 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                       <FormItem>
                         <FormLabel>Повторите пароль</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" placeholder="Супер сложный пароль еще раз" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" loading={isRegisterFormPending}>
                     Зарегистрироваться
                   </Button>
                 </div>

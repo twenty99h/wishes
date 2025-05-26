@@ -1,4 +1,5 @@
 import { ThemeSwitcher } from '@/app/theme-switcher';
+import { User } from '@/app/layout/user';
 import {
   SidebarHeader,
   SidebarContent,
@@ -52,6 +53,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <ThemeSwitcher />
+        <User />
       </SidebarFooter>
     </Sidebar>
   );

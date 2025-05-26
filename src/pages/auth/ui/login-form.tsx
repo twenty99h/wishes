@@ -6,10 +6,13 @@ import { Input } from '@/shared/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { LoginForm as LoginFormType, loginFormSchema } from '../model';
+import { $isLoginFormPending, LoginForm as LoginFormType, login, loginFormSchema } from '../model';
 import { Link } from 'react-router';
+import { useUnit } from 'effector-react';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const [onLogin, isLoginFormPending] = useUnit([login, $isLoginFormPending]);
+
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -19,7 +22,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   });
 
   function handleFormSubmit(data: LoginFormType) {
-    console.log(data);
+    onLogin(data);
   }
 
   return (
@@ -54,13 +57,13 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                       <FormItem>
                         <FormLabel>Пароль</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input type="password" placeholder="Супер сложный пароль" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" loading={isLoginFormPending}>
                     Войти
                   </Button>
                 </div>

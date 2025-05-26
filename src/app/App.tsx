@@ -1,8 +1,11 @@
+import { Toaster } from '@/shared/ui/sonner';
 import { useGate } from 'effector-react';
 import { useNavigate } from 'react-router';
 import { AppLayout } from './layout/layout';
 import { AppGate } from './model';
-import { Toaster } from '@/shared/ui/sonner';
+import { initUser } from '@/entities/user';
+
+initUser();
 
 function App() {
   const navigate = useNavigate();
