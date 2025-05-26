@@ -1,19 +1,8 @@
-import {
-  Button,
-  Flex,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-  Input,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/shared/ui';
+import { Button, Flex, Form, FormControl, FormField, FormItem, FormMessage, Input } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useUnit } from 'effector-react';
 import { useForm } from 'react-hook-form';
+import type { WishlistForm } from '../model';
 import {
   $formMode,
   $formValues,
@@ -26,8 +15,6 @@ import {
   wishlistFormSchema,
   wishlistUpdated,
 } from '../model';
-import type { WishlistForm } from '../model';
-import { useUnit } from 'effector-react';
 
 export function WishlistForm() {
   const [
@@ -90,19 +77,19 @@ export function WishlistForm() {
           />
         </Flex>
         <Flex gap={2} justify="between">
-          <Flex gap={2}>
-            <Button type="submit" loading={isFormActionsPending}>
-              {isEditing ? 'Сохранить' : 'Создать'}
-            </Button>
+          <Button type="button" variant="secondary" onClick={closeDialog}>
+            Отмена
+          </Button>
+          <Flex className="w-auto" gap={4}>
             {isEditing && isCanDelete && (
               <Button type="button" variant="destructive" loading={isFormActionsPending} onClick={onDelete}>
                 Удалить
               </Button>
             )}
+            <Button type="submit" loading={isFormActionsPending}>
+              {isEditing ? 'Сохранить' : 'Создать'}
+            </Button>
           </Flex>
-          <Button type="button" variant="secondary" onClick={closeDialog}>
-            Отмена
-          </Button>
         </Flex>
       </form>
     </Form>

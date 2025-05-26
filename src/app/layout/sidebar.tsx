@@ -13,13 +13,18 @@ import {
   Text,
   NavButton,
 } from '@/shared/ui';
-import { Gift } from 'lucide-react';
+import { Gift, Users } from 'lucide-react';
 
 const SIDEBAR_ITEMS = [
   {
     text: 'Желания',
     url: '/wishes',
     icon: Gift,
+  },
+  {
+    text: 'Пользователи',
+    url: '/users',
+    icon: Users,
   },
 ];
 
@@ -34,7 +39,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-4">
               {SIDEBAR_ITEMS.map((item) => {
                 return (
                   <SidebarMenuItem key={item.url}>

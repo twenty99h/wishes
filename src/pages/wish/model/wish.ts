@@ -77,6 +77,17 @@ sample({
 });
 
 sample({
+  clock: wishUpdated,
+  source: $wish,
+  filter: Boolean,
+  fn: (currentWish, updatedWish) => ({
+    ...currentWish,
+    title: updatedWish.title,
+  }),
+  target: $wish,
+});
+
+sample({
   clock: getWishQuery.finished.success,
   fn: ({ result }) => result,
   target: $wish,

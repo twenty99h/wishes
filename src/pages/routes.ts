@@ -11,3 +11,12 @@ export const WISHES_PAGE_ROTES = [
 ];
 
 export const AUTH_PAGE_ROUTES = AUTH_ROUTES;
+
+export const USERS_PAGE_ROUTES = [
+  {
+    path: '/users',
+    lazy: {
+      Component: async () => (await import('./users/ui/users-page')).UsersPage,
+    },
+  },
+];

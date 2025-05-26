@@ -28,16 +28,18 @@ export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
   }
 
   return (
-    <Flex align="center" gap={2}>
-      <Text size="xl" weight="bold">
-        {wishlist.title}
-      </Text>
-      <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
-        <Pencil size="16" />
-      </Button>
+    <Flex align="center" gap={4}>
+      <Flex className="w-auto" gap={2} align="center">
+        <Text size="xl" weight="bold">
+          {wishlist.title}
+        </Text>
+        <Button className="rounded-full" size="icon" variant="ghost" onClick={handleOpenEditingDialog}>
+          <Pencil size="16" />
+        </Button>
+      </Flex>
       <NavButton to={`/wishes/${wishlist.id}/create`} className="rounded-full" variant="secondary">
         <Plus size="16" />
-        <Text size="sm">Создать</Text>
+        <Text size="sm">Добавить желание</Text>
       </NavButton>
     </Flex>
   );
