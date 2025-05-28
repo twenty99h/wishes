@@ -1,11 +1,15 @@
 import { AuthError, User } from '@supabase/supabase-js';
 
-export type AuthUser = Omit<User, 'user_metadata'> & {
-  user_metadata: {
-    display_name: string;
-    avatar_url: string;
-  };
-};
+// export type AuthUser = Omit<User, 'user_metadata'> & {
+//   user_metadata: {
+//     username: string;
+//     avatar_url: string;
+//     bio?: string;
+//     role?: 'user' | 'admin';
+//     birthday?: Date;
+//   };
+// };
+export type AuthUser = User;
 
 export type SignUpData = {
   email: string;

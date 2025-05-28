@@ -40,12 +40,12 @@ export function User() {
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage src="/placeholder.svg?height=32&width=32" alt="Аватарка" />
               <AvatarFallback className="rounded-lg bg-gradient-to-br from-green-500 to-green-700 text-white">
-                {userData.display_name.slice(0, 2).toUpperCase()}
+                {userData.username.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <Flex direction="column" className="text-left text-sm leading-tight">
               <Text size="sm" weight="semibold" className="max-w-32 truncate">
-                {userData.display_name}
+                {userData.username}
               </Text>
             </Flex>
           </Flex>

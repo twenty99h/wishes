@@ -44,7 +44,7 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
       wishUpdated({ ...data });
     } else {
       const { id, ...createData } = data;
-      wishCreated({ ...createData, wishlistId: Number(wishlistId) });
+      wishCreated({ ...createData, wishlist_id: Number(wishlistId) });
     }
   }
 
@@ -63,7 +63,7 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
               <FormItem>
                 <FormLabel>Изображение</FormLabel>
                 <FormControl>
-                  <ImageUpload imageUrl={initialValues?.imageUrl} value={field.value} onChange={field.onChange} />
+                  <ImageUpload imageUrl={initialValues?.image_url} value={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormDescription>Загрузите изображение товара (необязательно)</FormDescription>
                 <FormMessage />
@@ -108,7 +108,7 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
           <Flex gap={4}>
             <FormField
               control={form.control}
-              name="productUrl"
+              name="product_url"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Ссылка на товар</FormLabel>

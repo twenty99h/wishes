@@ -5,7 +5,7 @@ const TABLE_NAME = 'wishes';
 const STORAGE_BUCKET = 'images';
 
 export async function getWishes(wishlistId: Wish['id']) {
-  const { data, error } = await supabase.from(TABLE_NAME).select('*').eq('wishlistId', wishlistId);
+  const { data, error } = await supabase.from(TABLE_NAME).select('*').eq('wishlist_id', wishlistId);
 
   if (error) throw error;
   return data;
@@ -18,7 +18,7 @@ export async function getWish(id: Wish['id']) {
   return data;
 }
 
-export async function createWish(wish: Omit<Wish, 'id'> & { file?: File; wishlistId: Wishlist['id'] }) {
+export async function createWish(wish: Omit<Wish, 'id'> & { file?: File; wishlist_id: Wishlist['id'] }) {
   const { file, ...wishData } = wish;
 
   const { data: newWish, error: createError } = await supabase
@@ -34,7 +34,7 @@ export async function createWish(wish: Omit<Wish, 'id'> & { file?: File; wishlis
       const imageUrl = await uploadWishImage(file, newWish.id);
       const { data: updatedWish, error: updateError } = await supabase
         .from(TABLE_NAME)
-        .update({ imageUrl })
+        .update({ image_url: imageUrl })
         .eq('id', newWish.id)
         .select()
         .single();
@@ -52,12 +52,12 @@ export async function createWish(wish: Omit<Wish, 'id'> & { file?: File; wishlis
 }
 
 export async function updateWish(wish: Wish & { file?: File }) {
-  const { id, imageUrl, file, ...wishData } = wish;
+  const { id, image_url, file, ...wishData } = wish;
 
   // If there's a new image, upload it and delete the old one
   if (file) {
-    if (imageUrl) {
-      await deleteWishImage(imageUrl);
+    if (image_url) {
+      await deleteWishImage(image_url);
     }
 
     // Upload new image
@@ -66,7 +66,7 @@ export async function updateWish(wish: Wish & { file?: File }) {
     // Update wish with new image URL
     const { data: updatedWish, error: updateError } = await supabase
       .from(TABLE_NAME)
-      .update({ ...wishData, imageUrl: newImageUrl })
+      .update({ ...wishData, image_url: newImageUrl })
       .eq('id', id)
       .select()
       .single();

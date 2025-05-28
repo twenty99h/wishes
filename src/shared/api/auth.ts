@@ -8,7 +8,8 @@ export async function signUp({ email, password, username }: SignUpData): Promise
     password,
     options: {
       data: {
-        display_name: username,
+        username,
+        email,
       },
     },
   });

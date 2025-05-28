@@ -12,13 +12,13 @@ export const wishFormSchema = z.object({
   description: z.string().optional(),
   price: z.coerce.number().min(0, 'Цена не может быть отрицательной').optional(),
   status: z.enum(['available', 'reserved', 'purchased']),
-  productUrl: z
+  product_url: z
     .string()
     .optional()
     .refine((val) => !val || z.string().url().safeParse(val).success, { message: 'Некорректная ссылка' }),
-  imageUrl: z.string().optional(),
+  image_url: z.string().optional(),
   file: z.any().optional(),
-  wishlistId: z.number().optional(),
+  wishlist_id: z.number().optional(),
 });
 
 export type WishForm = z.infer<typeof wishFormSchema>;
@@ -28,8 +28,8 @@ export const WISH_FORM_DEFAULT_VALUES: WishForm = {
   title: '',
   description: '',
   price: undefined,
-  productUrl: '',
-  imageUrl: '',
+  product_url: '',
+  image_url: '',
   status: 'available',
 };
 
@@ -49,7 +49,7 @@ const updateWishMutation = createMutation({
   effect: updateWishFx,
 });
 
-export const wishCreated = createEvent<Omit<WishForm, 'id'> & { file?: File; wishlistId: Wishlist['id'] }>();
+export const wishCreated = createEvent<Omit<WishForm, 'id'> & { file?: File; wishlist_id: Wishlist['id'] }>();
 export const wishUpdated = createEvent<WishForm & { file?: File }>();
 
 export const $isFormPending = or(createWishMutation.$pending, updateWishMutation.$pending);
@@ -72,7 +72,7 @@ sample({
 
 sample({
   clock: wishUpdated,
-  filter: (wish): wish is Wish & { file?: File } => Boolean(wish.wishlistId),
+  filter: (wish): wish is Wish & { file?: File } => Boolean(wish.wishlist_id),
   target: updateWishMutation.start,
 });
 

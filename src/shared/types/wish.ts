@@ -4,10 +4,15 @@ export type Wish = {
   description?: string;
   price?: number;
   status: 'available' | 'reserved' | 'purchased';
-  reservedBy?: number;
-  productUrl?: string;
-  imageUrl?: string;
-  wishlistId: Wishlist['id'];
+  visibility: 'public' | 'private' | 'friends-only';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  reserved?: any;
+  product_url?: string;
+  image_url?: string;
+  wishlist_id: Wishlist['id'];
+  purchased_at: Date | null;
+  reserved_at: Date | null;
+  created_at: Date;
 };
 
 export type Wishlist = {
