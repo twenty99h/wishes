@@ -2,7 +2,7 @@ import type { Profile } from '@/shared/types/profile';
 import { Card, CardContent, CardHeader, Flex, LoadingButton, NavButton, Text } from '@/shared/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useUnit } from 'effector-react';
-import { User, UserPlus } from 'lucide-react';
+import { User, UserMinus, UserPlus } from 'lucide-react';
 import { $pendingUsersMap, userFollowed, userUnfollowed } from '../model';
 
 interface UserCardProps {
@@ -43,7 +43,9 @@ export function UserCard({ user }: UserCardProps) {
         <Flex gap={2}>
           <LoadingButton
             className="w-1/2"
-            startIcon={<UserPlus className="h-4 w-4" />}
+            startIcon={
+              user.is_current_user_followed ? <UserMinus className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />
+            }
             variant={user.is_current_user_followed ? 'outline' : 'default'}
             size="sm"
             loading={isPending}

@@ -5,7 +5,7 @@ import { supabase } from '@@/supabase';
 const TABLE_NAME = 'wishes';
 const STORAGE_BUCKET = 'images';
 
-export async function getWishes({ wishlistId, userId }: { wishlistId: Wish['id']; userId: AuthUser['id'] }) {
+export async function getWishes({ wishlistId, userId }: { wishlistId: Wishlist['id']; userId: AuthUser['id'] }) {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .select('*')
@@ -17,8 +17,8 @@ export async function getWishes({ wishlistId, userId }: { wishlistId: Wish['id']
   return data;
 }
 
-export async function getMyWishes() {
-  const { data, error } = await supabase.rpc('get_my_wishes');
+export async function getMyWishes({ wishlistId }: { wishlistId: Wishlist['id'] }) {
+  const { data, error } = await supabase.rpc('get_my_wishes', { current_wishlist_id: wishlistId });
 
   if (error) throw error;
 

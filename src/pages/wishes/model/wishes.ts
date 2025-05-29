@@ -10,7 +10,8 @@ export const wishesQuery = createQuery({
 });
 
 sample({
-  clock: PageGate.open,
+  clock: PageGate.state,
+  filter: ({ wishlistId }) => Boolean(wishlistId),
   fn: ({ wishlistId }) => ({ wishlistId: Number(wishlistId) }),
   target: wishesQuery.start,
 });

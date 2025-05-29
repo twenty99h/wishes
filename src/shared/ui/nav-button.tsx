@@ -12,7 +12,9 @@ type NavButtonProps = React.ComponentProps<'button'> &
 function NavButton({ variant, size, className, to, children, ...props }: NavButtonProps) {
   return (
     <Button className={cn(buttonVariants({ variant, size, className }))} asChild {...props}>
-      <Link to={to}>{children}</Link>
+      <Link className="text-inherit" to={to}>
+        {children}
+      </Link>
     </Button>
   );
 }

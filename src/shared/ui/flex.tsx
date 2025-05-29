@@ -50,6 +50,9 @@ const flexVariants = cva('flex', {
       0: 'shrink-0',
       1: 'shrink',
     },
+    width: {
+      max: 'w-full',
+    },
   },
   defaultVariants: {
     direction: 'row',
@@ -65,12 +68,12 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement>, VariantProps<
 }
 
 const Flex = forwardRef<HTMLDivElement, FlexProps>(
-  ({ className, direction, align, justify, wrap, gap, grow, shrink, inline, ...props }, ref) => {
+  ({ className, direction, align, justify, wrap, gap, grow, shrink, width, inline, ...props }, ref) => {
     return (
       <div
         ref={ref}
         className={cn(
-          flexVariants({ direction, align, justify, wrap, gap, grow, shrink }),
+          flexVariants({ direction, align, justify, wrap, gap, grow, shrink, width }),
           inline && 'inline-flex',
           className
         )}

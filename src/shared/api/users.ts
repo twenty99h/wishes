@@ -26,6 +26,16 @@ export async function getAllUsersWithSubscriptionStatus({ search }: { search?: s
   return users;
 }
 
+export async function getUser(userId: string): Promise<Profile> {
+  const { data: user, error } = await supabase
+    .rpc('get_profile_with_subscription_status', { profile_id: userId })
+    .single<Profile>();
+
+  if (error) throw error;
+
+  return user;
+}
+
 export async function getMyFollows(userId: string): Promise<Profile[]> {
   const { data: users, error } = await supabase.from(FOLLOWS_TABLE).select('*').eq('follower_id', userId);
 
