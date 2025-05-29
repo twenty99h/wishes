@@ -1,6 +1,7 @@
 import { WishCard } from '@/features/wish-card';
 import { Wish } from '@/shared/types/wish';
 import { Flex, Skeleton, Text } from '@/shared/ui';
+import { useParams } from 'react-router';
 
 type WishesListProps = {
   wishes: Wish[];
@@ -10,16 +11,24 @@ type WishesListProps = {
 
 // TODO: Вынести это в фичу
 export function WishesList({ wishes, isPending, error }: WishesListProps) {
+  const { wishlistId } = useParams();
+
   if (isPending) {
     return <WishesListSkeleton />;
   }
 
-  // TODO: Add illustration to show error and retry button
   if (error) {
     return <div>Wishlists Error: {error.message}</div>;
   }
 
-  // TODO: Наверное тоже илюстрацию сюда добавить стоит
+  if (!wishlistId) {
+    return (
+      <Flex className="w-full p-16" justify="center" align="center">
+        <Text size="xl">Выберите какой-нибудь вишлист или создайте новый!</Text>
+      </Flex>
+    );
+  }
+
   if (wishes.length === 0) {
     return (
       <Flex className="w-full p-16" justify="center" align="center">

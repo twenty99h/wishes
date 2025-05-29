@@ -5,7 +5,7 @@ import { concurrency, createQuery } from '@farfetched/core';
 import { createEffect, createStore, sample } from 'effector';
 import { PageGate } from './page';
 
-const getWishlistsFx = createEffect(wishlistsApi.getWishlists);
+const getWishlistsFx = createEffect(wishlistsApi.getMyWishlists);
 
 export const wishlistsQuery = createQuery({
   effect: getWishlistsFx,

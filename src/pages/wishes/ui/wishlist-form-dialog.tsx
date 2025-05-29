@@ -21,6 +21,7 @@ export function WishlistFormDialog() {
           onClick={() => openDialog({ mode: 'create' })}
         >
           <Plus />
+          Новый список
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]" aria-describedby={undefined} withClose={false}>

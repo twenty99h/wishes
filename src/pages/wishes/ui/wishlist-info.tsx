@@ -17,7 +17,7 @@ export function WishlistInfo({ wishlist, isPending }: WishlistInfoProps) {
   }
 
   if (!wishlist) {
-    return <div>Не удалось загрузить вишлист. Попробуйте обновить страницу.</div>;
+    return null;
   }
 
   function handleOpenEditingDialog() {

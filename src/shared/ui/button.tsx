@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/shared/lib/utils';
 import { Spinner } from './spinner';
+import { Loader2 } from 'lucide-react';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -67,4 +68,38 @@ function Button({
   );
 }
 
-export { Button, buttonVariants };
+type LoadingButtonProps = React.ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+    loading?: boolean;
+    startIcon?: React.ReactNode;
+    endIcon?: React.ReactNode;
+  };
+
+function LoadingButton({
+  children,
+  className,
+  disabled,
+  loading = false,
+  startIcon,
+  endIcon,
+  variant = 'default',
+  size = 'default',
+  ...props
+}: LoadingButtonProps) {
+  return (
+    <Button className={cn(className)} disabled={disabled || loading} variant={variant} size={size} {...props}>
+      {loading ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <>
+          {startIcon && <span className="mr-2">{startIcon}</span>}
+          {children}
+          {endIcon && <span className="ml-2">{endIcon}</span>}
+        </>
+      )}
+    </Button>
+  );
+}
+
+export { Button, LoadingButton, buttonVariants };

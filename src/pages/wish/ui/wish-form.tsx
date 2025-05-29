@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  LoadingButton,
   Textarea,
 } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -170,10 +171,9 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
             <X />
             Отмена
           </Button>
-          <Button type="submit" loading={isFormPending}>
-            <Save />
+          <LoadingButton startIcon={<Save />} type="submit" loading={isFormPending}>
             Сохранить желание
-          </Button>
+          </LoadingButton>
         </Flex>
       </form>
     </Form>

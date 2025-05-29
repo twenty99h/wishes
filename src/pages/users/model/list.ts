@@ -2,8 +2,8 @@ import { $user } from '@/entities/user';
 import { usersApi } from '@/shared/api';
 import { createMutation, createQuery } from '@farfetched/core';
 import { combine, createEffect, sample } from 'effector';
-import { debug } from 'patronum';
 import { $search, searchDebounced } from './search';
+import { PageGate } from './page';
 
 const getAllUsersFx = createEffect(usersApi.getAllUsersWithSubscriptionStatus);
 const getMySubscriptionsFx = createEffect(usersApi.getMyFollows);
@@ -29,14 +29,8 @@ export const unfollowUserMutation = createMutation({
 export const $isUsersPending = combine($user, usersQuery.$pending, (user, pending) => !user || pending);
 
 sample({
-  clock: [searchDebounced, $user],
-  source: { user: $user, search: $search },
-  filter: ({ user }) => Boolean(user),
-  fn: ({ user, search }) => ({ userId: user!.id, search }),
+  clock: [PageGate.open, searchDebounced],
+  source: $search,
+  fn: (search) => ({ search }),
   target: usersQuery.start,
-});
-
-debug({
-  usersQuery: usersQuery.$status,
-  user: $user,
 });

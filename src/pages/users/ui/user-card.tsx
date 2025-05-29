@@ -1,21 +1,26 @@
 import type { Profile } from '@/shared/types/profile';
-import { Button, Card, CardContent, CardHeader, Flex, Text } from '@/shared/ui';
-import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
-import { UserPlus, Gift } from 'lucide-react';
+import { Card, CardContent, CardHeader, Flex, LoadingButton, NavButton, Text } from '@/shared/ui';
+import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { useUnit } from 'effector-react';
+import { User, UserPlus } from 'lucide-react';
+import { $pendingUsersMap, userFollowed, userUnfollowed } from '../model';
 
 interface UserCardProps {
   user: Profile;
-  isSubscribed: boolean;
-  loading?: boolean;
-  onSubscribe?: (userId: string) => void;
-  onUnsubscribe?: (userId: string) => void;
 }
 
-const isFollowed = false;
+export function UserCard({ user }: UserCardProps) {
+  const [onFollowUser, onUnfollowUser, pendingUsersMap] = useUnit([userFollowed, userUnfollowed, $pendingUsersMap]);
 
-export function UserCard({ user, isSubscribed, loading, onSubscribe, onUnsubscribe }: UserCardProps) {
+  const isPending = pendingUsersMap[user.id];
+
+  function handleFollowing(userId: string) {
+    const handler = user.is_current_user_followed ? onUnfollowUser : onFollowUser;
+    handler(userId);
+  }
+
   return (
-    <Card className="group gap-2 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <Card className="group gap-2 hover:shadow-lg transition-all duration-300">
       <CardHeader className="pb-3">
         <Flex align="center" gap={2}>
           <Avatar>
@@ -35,28 +40,21 @@ export function UserCard({ user, isSubscribed, loading, onSubscribe, onUnsubscri
         <Text size="sm" className="text-muted-foreground line-clamp-2">
           {user.bio || 'Пользователь пока ничего не рассказал о себе...'}
         </Text>
-        {/* <div className="grid grid-cols-3 gap-2 text-center">
-          <div>
-            <div className="text-sm font-semibold">{user.wishlistsCount}</div>
-            <div className="text-xs text-muted-foreground">Списков</div>
-          </div>
-          <div>
-            <div className="text-sm font-semibold">{user.friendsCount}</div>
-            <div className="text-xs text-muted-foreground">Друзей</div>
-          </div>
-          <div>
-            <div className="text-sm font-semibold">{user.followersCount}</div>
-            <div className="text-xs text-muted-foreground">Подписчиков</div>
-          </div>
-        </div> */}
         <Flex gap={2}>
-          <Button variant={isFollowed ? 'outline' : 'default'} size="sm" className="flex-1">
-            <UserPlus className="mr-2 h-4 w-4" />
-            {isFollowed ? 'Отписаться' : 'Подписаться'}
-          </Button>
-          <Button variant="outline" size="sm">
-            <Gift className="h-4 w-4" />
-          </Button>
+          <LoadingButton
+            className="w-1/2"
+            startIcon={<UserPlus className="h-4 w-4" />}
+            variant={user.is_current_user_followed ? 'outline' : 'default'}
+            size="sm"
+            loading={isPending}
+            onClick={() => handleFollowing(user.id)}
+          >
+            {user.is_current_user_followed ? 'Отписаться' : 'Подписаться'}
+          </LoadingButton>
+          <NavButton to={`/users/${user.id}`} className="w-1/2" variant="default" size="sm">
+            <User className="h-4 w-4" />
+            Посмотреть
+          </NavButton>
         </Flex>
       </CardContent>
     </Card>

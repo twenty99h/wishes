@@ -1,13 +1,27 @@
-import { Wish, Wishlist } from '@/shared/types/wish';
+import type { Wish, Wishlist } from '@/shared/types/wish';
+import type { AuthUser } from '@/shared/types/auth';
 import { supabase } from '@@/supabase';
 
 const TABLE_NAME = 'wishes';
 const STORAGE_BUCKET = 'images';
 
-export async function getWishes(wishlistId: Wish['id']) {
-  const { data, error } = await supabase.from(TABLE_NAME).select('*').eq('wishlist_id', wishlistId);
+export async function getWishes({ wishlistId, userId }: { wishlistId: Wish['id']; userId: AuthUser['id'] }) {
+  const { data, error } = await supabase
+    .from(TABLE_NAME)
+    .select('*')
+    .eq('wishlist_id', wishlistId)
+    .eq('user_id', userId);
 
   if (error) throw error;
+
+  return data;
+}
+
+export async function getMyWishes() {
+  const { data, error } = await supabase.rpc('get_my_wishes');
+
+  if (error) throw error;
+
   return data;
 }
 

@@ -27,6 +27,5 @@
       "@/*": ["./src/*"],
       "@@/*": ["./*"]
     }
-  },
-  "include": ["src", "public/mockServiceWorker.js"]
+  }
 }

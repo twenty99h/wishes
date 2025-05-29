@@ -28,9 +28,11 @@ const deleteWishlistFx = createEffect(wishlistsApi.deleteWishlist);
 export const createWishlistMutation = createMutation({
   effect: createWishlistFx,
 });
+
 export const updateWishlistMutation = createMutation({
   effect: updateWishlistFx,
 });
+
 export const deleteWishlistMutation = createMutation({
   effect: deleteWishlistFx,
 });

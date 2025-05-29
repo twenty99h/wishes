@@ -12,14 +12,8 @@ export async function getAllUsers(): Promise<Profile[]> {
   return users;
 }
 
-export async function getAllUsersWithSubscriptionStatus({
-  userId,
-  search,
-}: {
-  userId: string;
-  search?: string;
-}): Promise<Profile[]> {
-  let query = supabase.rpc('get_profiles_with_subscription_status', { user_id: userId });
+export async function getAllUsersWithSubscriptionStatus({ search }: { search?: string }): Promise<Profile[]> {
+  let query = supabase.rpc('get_profiles_with_subscription_status');
 
   if (search) {
     query = query.or(`username.ilike.%${search}%, email.ilike.%${search}%`);
@@ -40,13 +34,25 @@ export async function getMyFollows(userId: string): Promise<Profile[]> {
   return users;
 }
 
-export async function followUser(userId: string, followedUserId: string): Promise<void> {
+export async function followUser({
+  userId,
+  followedUserId,
+}: {
+  userId: string;
+  followedUserId: string;
+}): Promise<void> {
   const { error } = await supabase.from(FOLLOWS_TABLE).insert({ followee_id: followedUserId, follower_id: userId });
 
   if (error) throw error;
 }
 
-export async function unfollowUser(userId: string, followedUserId: string): Promise<void> {
+export async function unfollowUser({
+  userId,
+  followedUserId,
+}: {
+  userId: string;
+  followedUserId: string;
+}): Promise<void> {
   const { error } = await supabase
     .from(FOLLOWS_TABLE)
     .delete()

@@ -3,15 +3,14 @@ import { createQuery } from '@farfetched/core';
 import { createEffect, sample } from 'effector';
 import { PageGate } from './page';
 
-const getWishesFx = createEffect(wishesApi.getWishes);
+const getWishesFx = createEffect(wishesApi.getMyWishes);
 
 export const wishesQuery = createQuery({
   effect: getWishesFx,
 });
 
 sample({
-  clock: PageGate.state,
-  filter: ({ wishlistId }) => Boolean(wishlistId),
-  fn: ({ wishlistId }) => Number(wishlistId),
+  clock: PageGate.open,
+  fn: ({ wishlistId }) => ({ wishlistId: Number(wishlistId) }),
   target: wishesQuery.start,
 });

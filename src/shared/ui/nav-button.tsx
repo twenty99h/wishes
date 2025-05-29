@@ -1,6 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
 import { Link, LinkProps } from 'react-router';
-import { cn } from '../lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { Button, buttonVariants } from './button';
 
 type NavButtonProps = React.ComponentProps<'button'> &

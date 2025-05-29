@@ -23,7 +23,7 @@ export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
   }
 
   return (
-    <Flex gap={2}>
+    <Flex gap={2} align="center">
       {wishlists.map((wishlist) => (
         <WishlistItem key={wishlist.id} wishlist={wishlist} active={wishlist.id === Number(wishlistId)} />
       ))}

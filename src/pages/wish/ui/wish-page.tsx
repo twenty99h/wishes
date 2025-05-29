@@ -64,13 +64,17 @@ export function WishPage() {
 
 function WishPageSkeleton() {
   return (
-    <Flex className="p-6" direction="column" gap={6}>
-      <Skeleton className="h-6 w-1/4" />
-      <Flex direction="column" gap={4}>
+    <Flex className="p-6 max-w-3xl w-full" direction="column" gap={6}>
+      <Skeleton className="h-8 w-24" />
+      <Flex className="w-full" direction="column" gap={2}>
+        <Skeleton className="h-8 w-full" />
         <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-12 w-full" />
-        <Skeleton className="h-6 w-full" />
-        <Skeleton className="h-6 w-full" />
+      </Flex>
+      <Flex className="w-full" direction="column" gap={4}>
+        <Skeleton className="h-64 w-full" />
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="h-14 w-full" />
+        <Skeleton className="h-8 w-full" />
         <Flex gap={4}>
           <Skeleton className="h-6 w-1/2" />
           <Skeleton className="h-6 w-1/2" />

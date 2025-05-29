@@ -1,12 +1,28 @@
-import { Wishlist, WishlistData } from '@/shared/types/wish';
+import type { Wishlist, WishlistData } from '@/shared/types/wish';
+import type { AuthUser } from '@/shared/types/auth';
 import { supabase } from '@@/supabase';
 
 const TABLE_NAME = 'wishlists';
 
-export async function getWishlists(): Promise<{ wishlists: Wishlist[] }> {
-  const { data, error } = await supabase.from(TABLE_NAME).select('*');
+export async function getWishlists({ userId }: { userId?: AuthUser['id'] }): Promise<{ wishlists: Wishlist[] }> {
+  let query = supabase.from(TABLE_NAME).select('*');
+
+  if (userId) {
+    query = query.eq('user_id', userId);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
+
+  return { wishlists: data };
+}
+
+export async function getMyWishlists(): Promise<{ wishlists: Wishlist[] }> {
+  const { data, error } = await supabase.rpc('get_my_wishlists');
+
+  if (error) throw error;
+
   return { wishlists: data };
 }
 
@@ -19,7 +35,9 @@ export async function getWishlist(id: Wishlist['id']): Promise<Wishlist> {
 }
 
 export async function createWishlist(data: WishlistData): Promise<Wishlist> {
-  const { data: createdWishlist, error } = await supabase.from(TABLE_NAME).insert(data).select().single();
+  const { data: createdWishlist, error } = await supabase.rpc('add_wishlist', {
+    wishlist_data: { title: data.title, description: '' },
+  });
 
   if (error) throw error;
 

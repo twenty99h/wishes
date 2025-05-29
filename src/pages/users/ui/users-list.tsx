@@ -2,14 +2,14 @@ import { useUnit } from 'effector-react';
 import { Users } from 'lucide-react';
 import { $isUsersPending, usersQuery } from '../model';
 import { UserCard } from './user-card';
-import { Flex, Text } from '@/shared/ui';
+import { Flex, Skeleton, Text } from '@/shared/ui';
 
 export function UsersList() {
   const { data: users, error } = useUnit(usersQuery);
   const pending = useUnit($isUsersPending);
 
   if (pending) {
-    return <div className="text-muted-foreground p-4">Загрузка...</div>;
+    return <UserCardSkeleton />;
   }
 
   if (error) {
@@ -29,7 +29,17 @@ export function UsersList() {
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
       {users.map((user) => (
-        <UserCard key={user.id} user={user} isSubscribed={false} />
+        <UserCard key={user.id} user={user} />
+      ))}
+    </div>
+  );
+}
+
+function UserCardSkeleton() {
+  return (
+    <div className="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+      {Array.from({ length: 12 }).map((_, index) => (
+        <Skeleton key={index} className="w-full h-48" />
       ))}
     </div>
   );
