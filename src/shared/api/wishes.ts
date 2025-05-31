@@ -1,4 +1,4 @@
-import type { Wish, Wishlist } from '@/shared/types/wish';
+import type { Wish, WishCreateData, Wishlist } from '@/shared/types/wish';
 import type { AuthUser } from '@/shared/types/auth';
 import { supabase } from '@@/supabase';
 
@@ -32,7 +32,7 @@ export async function getWish(id: Wish['id']) {
   return data;
 }
 
-export async function createWish(wish: Omit<Wish, 'id'> & { file?: File; wishlist_id: Wishlist['id'] }) {
+export async function createWish(wish: WishCreateData) {
   const { file, ...wishData } = wish;
 
   const { data: newWish, error: createError } = await supabase
@@ -94,6 +94,21 @@ export async function updateWish(wish: Wish & { file?: File }) {
 
   if (error) throw error;
   return updatedWish;
+}
+
+export async function reserveWish(wishId: Wish['id']) {
+  const { data, error } = await supabase.rpc('reserve_wish', { wish_id: wishId });
+
+  if (error) throw error;
+  return data;
+}
+
+export async function unreserveWish(wishId: Wish['id']) {
+  const { data, error } = await supabase.rpc('cancel_reservation', { wish_id: wishId });
+
+  if (error) throw error;
+
+  return data;
 }
 
 export async function deleteWish(id: Wish['id'], imageUrl?: string) {

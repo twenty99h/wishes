@@ -2,7 +2,7 @@ import type { Profile } from '@/shared/types/profile';
 import { Card, CardContent, CardHeader, Flex, LoadingButton, NavButton, Text } from '@/shared/ui';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useUnit } from 'effector-react';
-import { User, UserMinus, UserPlus } from 'lucide-react';
+import { Eye, UserMinus, UserPlus } from 'lucide-react';
 import { $pendingUsersMap, userFollowed, userUnfollowed } from '../model';
 
 interface UserCardProps {
@@ -37,12 +37,16 @@ export function UserCard({ user }: UserCardProps) {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <Text size="sm" className="text-muted-foreground line-clamp-2">
+        <Text size="sm" className="text-muted-foreground line-clamp-2 truncate">
           {user.bio || 'Пользователь пока ничего не рассказал о себе...'}
         </Text>
-        <Flex gap={2}>
+        <Flex gap={2} wrap="wrap">
+          <NavButton to={`/users/${user.id}`} className="flex-1" variant="default" size="sm">
+            <Eye className="h-4 w-4" />
+            Посмотреть
+          </NavButton>
           <LoadingButton
-            className="w-1/2"
+            className="border border-transparent"
             startIcon={
               user.is_current_user_followed ? <UserMinus className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />
             }
@@ -50,13 +54,7 @@ export function UserCard({ user }: UserCardProps) {
             size="sm"
             loading={isPending}
             onClick={() => handleFollowing(user.id)}
-          >
-            {user.is_current_user_followed ? 'Отписаться' : 'Подписаться'}
-          </LoadingButton>
-          <NavButton to={`/users/${user.id}`} className="w-1/2" variant="default" size="sm">
-            <User className="h-4 w-4" />
-            Посмотреть
-          </NavButton>
+          />
         </Flex>
       </CardContent>
     </Card>

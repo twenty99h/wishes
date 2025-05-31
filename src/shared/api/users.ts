@@ -12,11 +12,21 @@ export async function getAllUsers(): Promise<Profile[]> {
   return users;
 }
 
-export async function getAllUsersWithSubscriptionStatus({ search }: { search?: string }): Promise<Profile[]> {
+export async function getAllUsersWithSubscriptionStatus({
+  search,
+  filter,
+}: {
+  search?: string;
+  filter?: 'all' | 'following';
+}): Promise<Profile[]> {
   let query = supabase.rpc('get_profiles_with_subscription_status');
 
   if (search) {
     query = query.or(`username.ilike.%${search}%, email.ilike.%${search}%`);
+  }
+
+  if (filter === 'following') {
+    query = query.eq('is_current_user_followed', true);
   }
 
   const { data: users, error } = await query;

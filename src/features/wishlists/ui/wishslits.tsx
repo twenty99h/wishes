@@ -1,18 +1,17 @@
 import { Wishlist } from '@/shared/types/wish';
 import { Flex, Skeleton } from '@/shared/ui';
-import { useParams } from 'react-router';
-import { WishlistFormDialog } from './wishlist-form-dialog';
-import { WishlistItem } from './wishlist-item';
+import { WishlistCard } from './wishlist-card';
+import { ReactNode } from 'react';
 
 type WishesTabsProps = {
+  wishlistId: number;
   wishlists: Wishlist[];
   isPending?: boolean;
   error?: Error | null;
+  empty?: ReactNode | null;
 };
 
-export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
-  const { wishlistId } = useParams();
-
+export function Wishlists({ wishlistId, wishlists, isPending, error, empty = null }: WishesTabsProps) {
   if (isPending) {
     return <WishlistsSkeleton />;
   }
@@ -21,12 +20,14 @@ export function Wishlists({ wishlists, isPending, error }: WishesTabsProps) {
     return <div>Wishlists Error: {error.message}</div>;
   }
 
+  if (wishlists.length == 0) return empty;
+
   return (
-    <Flex gap={2} align="center">
+    <Flex gap={2} align="center" width="max">
       {wishlists.map((wishlist) => (
-        <WishlistItem key={wishlist.id} wishlist={wishlist} active={wishlist.id === Number(wishlistId)} />
+        <WishlistCard key={wishlist.id} wishlist={wishlist} active={wishlist.id === wishlistId} />
       ))}
-      <WishlistFormDialog />
+      {/* <WishlistFormDialog /> */}
     </Flex>
   );
 }

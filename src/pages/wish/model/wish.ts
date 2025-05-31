@@ -5,6 +5,7 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 import { z } from 'zod';
 import { PageGate } from './page';
 import { or } from 'patronum';
+import { $user } from '@/entities/user';
 
 export const wishFormSchema = z.object({
   id: z.number().nullable(),
@@ -67,6 +68,9 @@ sample({
 
 sample({
   clock: wishCreated,
+  source: $user,
+  filter: Boolean,
+  fn: (user, wish) => ({ ...wish, user_id: user.id }),
   target: createWishMutation.start,
 });
 
