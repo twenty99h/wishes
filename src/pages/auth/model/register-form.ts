@@ -5,6 +5,7 @@ import { navigate } from '@/shared/lib/router';
 import { createMutation } from '@farfetched/core';
 import { createEffect, createEvent, sample } from 'effector';
 import { z } from 'zod';
+import { SignUpData } from '@/shared/types/auth';
 
 export const registerFormSchema = z
   .object({
@@ -37,6 +38,11 @@ export const $isRegisterFormPending = registerMutation.$pending;
 
 sample({
   clock: register,
+  fn: (form): SignUpData => ({
+    email: form.email,
+    password: form.password,
+    username: form.username,
+  }),
   target: registerMutation.start,
 });
 

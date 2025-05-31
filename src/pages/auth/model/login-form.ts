@@ -2,6 +2,7 @@ import { $user } from '@/entities/user';
 import { authApi } from '@/shared/api';
 import { showToast, ToastParams } from '@/shared/lib/model';
 import { navigate } from '@/shared/lib/router';
+import { SignInData } from '@/shared/types/auth';
 import { createMutation } from '@farfetched/core';
 import { createEffect, createEvent, sample } from 'effector';
 import { z } from 'zod';
@@ -25,6 +26,10 @@ export const $isLoginFormPending = loginMutation.$pending;
 
 sample({
   clock: login,
+  fn: (form): SignInData => ({
+    email: form.email,
+    password: form.password,
+  }),
   target: loginMutation.start,
 });
 
