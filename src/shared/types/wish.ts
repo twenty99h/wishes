@@ -41,3 +41,5 @@ export type WishCreateData = {
   file?: File;
   wishlist_id: number;
 };
+
+export type WishUpdateData = Wish & { file?: File };

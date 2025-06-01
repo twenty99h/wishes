@@ -13,14 +13,21 @@ import {
   Textarea,
 } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, X } from 'lucide-react';
+import { Save, Trash, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { useUnit } from 'effector-react';
 import type { WishForm } from '../model';
-import { $isFormPending, WISH_FORM_DEFAULT_VALUES, wishCreated, wishFormSchema, wishUpdated } from '../model';
+import {
+  $isFormPending,
+  WISH_FORM_DEFAULT_VALUES,
+  wishCreated,
+  wishDeleted,
+  wishFormSchema,
+  wishUpdated,
+} from '../model';
 import { WishPageMode } from '../types';
 import { ImageUpload } from './image-upload';
 
@@ -33,18 +40,21 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
   const navigate = useNavigate();
   const { wishlistId } = useParams();
 
-  const isFormPending = useUnit($isFormPending);
+  const [onDelete, isFormPending] = useUnit([wishDeleted, $isFormPending]);
 
   const form = useForm({
     resolver: zodResolver(wishFormSchema),
-    defaultValues: initialValues || WISH_FORM_DEFAULT_VALUES,
+    values: initialValues || WISH_FORM_DEFAULT_VALUES,
   });
 
   function handleSubmit(data: WishForm) {
+    console.log('submit', data);
+
     if (mode === 'edit' && data.id) {
       wishUpdated({ ...data });
     } else {
       const { id, ...createData } = data;
+      console.log('createData', createData);
       wishCreated({ ...createData, wishlist_id: Number(wishlistId) });
     }
   }
@@ -55,7 +65,7 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
 
   return (
     <Form {...form}>
-      <form className="max-w-3xl w-full" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="w-full" onSubmit={form.handleSubmit(handleSubmit)}>
         <Flex direction="column" gap={4} className="mb-6">
           <FormField
             control={form.control}
@@ -106,7 +116,7 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
             )}
           />
 
-          <Flex gap={4}>
+          <Flex width="max" gap={4} className="flex-col md:flex-row">
             <FormField
               control={form.control}
               name="product_url"
@@ -156,7 +166,6 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="available">Доступно</SelectItem>
-                      <SelectItem value="reserved">Зарезервировано</SelectItem>
                       <SelectItem value="purchased">Куплено</SelectItem>
                     </SelectContent>
                   </Select>
@@ -171,9 +180,28 @@ export function WishForm({ mode, initialValues }: WishFormProps) {
             <X />
             Отмена
           </Button>
-          <LoadingButton startIcon={<Save />} type="submit" loading={isFormPending}>
-            Сохранить желание
-          </LoadingButton>
+          <Flex gap={8}>
+            <LoadingButton
+              startIcon={<Trash />}
+              type="button"
+              variant="destructive"
+              loading={isFormPending}
+              onClick={() => onDelete(initialValues?.id)}
+            >
+              Удалить
+            </LoadingButton>
+            <LoadingButton
+              startIcon={<Save />}
+              type="submit"
+              loading={isFormPending}
+              onClick={() => {
+                console.log('submit click');
+                console.log('form', form);
+              }}
+            >
+              Сохранить
+            </LoadingButton>
+          </Flex>
         </Flex>
       </form>
     </Form>

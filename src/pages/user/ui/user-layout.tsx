@@ -38,7 +38,7 @@ export function UserLayout({ user, pending, error }: { user: Profile; pending: b
         <CardHeader className="pb-0">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <UserAvatar src={user.avatar_url} alt={user.username} size="xl" />
+              <UserAvatar className="min-w-24" src={user.avatar_url} alt={user.username} size="xl" />
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-2xl font-bold">{user.username}</h2>

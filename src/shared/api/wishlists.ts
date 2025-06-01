@@ -58,7 +58,9 @@ export async function updateWishlist({ id, title }: Pick<Wishlist, 'id' | 'title
 }
 
 export async function deleteWishlist(id: Wishlist['id']): Promise<Wishlist> {
-  const { data, error } = await supabase.from(TABLE_NAME).delete().eq('id', id).select().single();
+  const { data, error } = await supabase.rpc('delete_wishlist', {
+    p_wishlist_id: id,
+  });
 
   if (error) throw error;
 

@@ -1,10 +1,11 @@
-import { Button, Flex, Skeleton, Text } from '@/shared/ui';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Flex, Skeleton, Text } from '@/shared/ui';
 import { useGate, useUnit } from 'effector-react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Link } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 import { $isWishPending, $wish, $wishError, PageGate } from '../model';
 import { WishPageMode } from '../types';
 import { WishForm } from './wish-form';
+import { WishParsing } from './wish-parsing';
 
 const TEXT_VARIANTS: Record<
   WishPageMode,
@@ -44,42 +45,76 @@ export function WishPage() {
   }
 
   return (
-    <Flex className="w-full p-6" direction="column" gap={6}>
-      <Button variant="outline" type="button" onClick={goBack}>
-        <ArrowLeft />
-        Назад
-      </Button>
-      <Flex direction="column">
-        <Text size="2xl" weight="bold">
-          {TEXT_VARIANTS[currentMode].title} {currentMode === 'edit' && wish && `- ${wish.title}`}
-        </Text>
-        <Text size="sm" variant="muted">
-          {TEXT_VARIANTS[currentMode].description}
-        </Text>
-      </Flex>
-      <WishForm mode={currentMode} initialValues={wish} />
+    <Flex width="max" justify="center" align="center" className="p-8">
+      <Card className="w-full max-w-4xl">
+        <CardHeader>
+          <Button className="justify-start max-w-24 mb-6" variant="outline" type="button" onClick={goBack}>
+            <ArrowLeft />
+            Назад
+          </Button>
+          <CardTitle>
+            {TEXT_VARIANTS[currentMode].title} {currentMode === 'edit' && wish && `- ${wish.title}`}
+          </CardTitle>
+          <CardDescription>{TEXT_VARIANTS[currentMode].description}</CardDescription>
+        </CardHeader>
+        {currentMode === 'create' && (
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Link className="h-4 w-4" />
+              Добавить товар по ссылке
+            </CardTitle>
+            <CardDescription>
+              Вставьте ссылку на товар с маркетплейса <strong className="text-primary">Wildberries</strong> для
+              автоматического парсинга
+            </CardDescription>
+            <WishParsing />
+          </CardHeader>
+        )}
+        <CardContent>
+          <WishForm mode={currentMode} initialValues={wish} />
+        </CardContent>
+      </Card>
     </Flex>
   );
 }
 
 function WishPageSkeleton() {
   return (
-    <Flex className="p-6 max-w-3xl w-full" direction="column" gap={6}>
-      <Skeleton className="h-8 w-24" />
-      <Flex className="w-full" direction="column" gap={2}>
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-6 w-full" />
-      </Flex>
-      <Flex className="w-full" direction="column" gap={4}>
-        <Skeleton className="h-64 w-full" />
-        <Skeleton className="h-8 w-full" />
-        <Skeleton className="h-14 w-full" />
-        <Skeleton className="h-8 w-full" />
-        <Flex gap={4}>
-          <Skeleton className="h-6 w-1/2" />
-          <Skeleton className="h-6 w-1/2" />
-        </Flex>
-      </Flex>
+    <Flex width="max" justify="center" align="center" className="p-8">
+      <Card className="w-full max-w-4xl">
+        <CardHeader>
+          <Skeleton className="h-10 w-24 mb-6" />
+          <Skeleton className="h-8 w-3/4 mb-2" />
+          <Skeleton className="h-5 w-1/2" />
+        </CardHeader>
+        <CardHeader>
+          <Skeleton className="h-6 w-64 mb-2" />
+          <Skeleton className="h-5 w-full mb-4" />
+          <Flex direction="column" gap={2} className="w-full">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-32 self-end" />
+          </Flex>
+        </CardHeader>
+        <CardContent>
+          <Flex direction="column" gap={4} className="mb-6">
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Flex width="max" gap={4} className="flex-col md:flex-row">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </Flex>
+            <Skeleton className="h-10 w-full" />
+          </Flex>
+          <Flex justify="between">
+            <Skeleton className="h-10 w-24" />
+            <Flex gap={8}>
+              <Skeleton className="h-10 w-24" />
+              <Skeleton className="h-10 w-24" />
+            </Flex>
+          </Flex>
+        </CardContent>
+      </Card>
     </Flex>
   );
 }

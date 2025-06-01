@@ -16,11 +16,11 @@ export function WishCard({ wish }: WishCardProps) {
           <img className="w-full rounded-3xl h-64 object-cover" src={wish.image_url} alt={wish.title} />
         </CardContent>
         <CardFooter>
-          <Flex direction="column">
-            <Text weight="semibold" size="lg">
+          <Flex direction="column" width="max">
+            <Text className="w-full truncate" weight="semibold" size="lg">
               {wish.title}
             </Text>
-            <Text>{wish.description}</Text>
+            <Text className="w-full truncate h-6">{wish.description}</Text>
           </Flex>
         </CardFooter>
       </Card>

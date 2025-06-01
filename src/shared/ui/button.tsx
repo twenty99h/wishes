@@ -93,9 +93,9 @@ function LoadingButton({
         <Loader2 className="animate-spin" />
       ) : (
         <>
-          {startIcon && <span className="mr-2">{startIcon}</span>}
+          {startIcon && <span>{startIcon}</span>}
           {children}
-          {endIcon && <span className="ml-2">{endIcon}</span>}
+          {endIcon && <span>{endIcon}</span>}
         </>
       )}
     </Button>

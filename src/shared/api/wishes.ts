@@ -1,4 +1,4 @@
-import type { Wish, WishCreateData, Wishlist } from '@/shared/types/wish';
+import type { Wish, WishCreateData, Wishlist, WishUpdateData } from '@/shared/types/wish';
 import type { AuthUser } from '@/shared/types/auth';
 import { supabase } from '@@/supabase';
 
@@ -65,7 +65,7 @@ export async function createWish(wish: WishCreateData) {
   return newWish;
 }
 
-export async function updateWish(wish: Wish & { file?: File }) {
+export async function updateWish(wish: WishUpdateData) {
   const { id, image_url, file, ...wishData } = wish;
 
   // If there's a new image, upload it and delete the old one

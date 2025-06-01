@@ -3,7 +3,7 @@ import type React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button, Input } from '@/shared/ui';
 import { Upload, X } from 'lucide-react';
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { toast } from 'sonner';
 
 interface ImageUploadProps {
@@ -15,12 +15,16 @@ interface ImageUploadProps {
 
 export function ImageUpload({ value, onChange, imageUrl, className }: ImageUploadProps) {
   const [dragActive, setDragActive] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(imageUrl ?? value ?? null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(value ?? null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Функция для обработки загрузки файла
+  useEffect(() => {
+    if (imageUrl) {
+      setPreviewUrl(imageUrl);
+    }
+  }, [imageUrl]);
+
   const handleFileUpload = async (file: File) => {
-    // Проверка типа файла
     if (!file.type.startsWith('image/')) {
       toast('Ошибка', {
         description: 'Пожалуйста, загрузите изображение',
@@ -28,7 +32,6 @@ export function ImageUpload({ value, onChange, imageUrl, className }: ImageUploa
       return;
     }
 
-    // Проверка размера файла (максимум 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast('Ошибка', {
         description: 'Размер файла не должен превышать 5MB',
@@ -41,14 +44,12 @@ export function ImageUpload({ value, onChange, imageUrl, className }: ImageUploa
     onChange(file);
   };
 
-  // Обработчик изменения input
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       handleFileUpload(e.target.files[0]);
     }
   };
 
-  // Обработчики drag-and-drop
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -70,12 +71,10 @@ export function ImageUpload({ value, onChange, imageUrl, className }: ImageUploa
     }
   };
 
-  // Обработчик клика по кнопке
   const handleButtonClick = () => {
     inputRef.current?.click();
   };
 
-  // Обработчик удаления изображения
   const handleRemoveImage = () => {
     setPreviewUrl(null);
     onChange(null);

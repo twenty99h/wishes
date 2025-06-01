@@ -6,6 +6,7 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 import { or } from 'patronum';
 import { z } from 'zod';
 import { $currentWishlist, wishlistsQuery } from './wishlist';
+import { navigate } from '@/shared/lib/router';
 
 type FormMode = 'create' | 'edit';
 
@@ -109,6 +110,14 @@ sample({
   clock: wishlistDeleted,
   fn: ({ id }) => id,
   target: deleteWishlistMutation.start,
+});
+
+sample({
+  clock: deleteWishlistMutation.start,
+  fn: () => ({
+    to: '/wishes',
+  }),
+  target: navigate,
 });
 
 sample({
